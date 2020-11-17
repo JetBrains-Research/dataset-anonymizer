@@ -22,7 +22,9 @@ repositories {
 
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
-    implementation(files("libs/ast-transformations-1.0-SNAPSHOT.zip"))
+    // TODO: publish transformation plugin
+    implementation(fileTree("libs") { include("*.jar") })
+    implementation("de.mpicbg.scicomp:krangl:0.9.1")
 }
 
 intellij {
