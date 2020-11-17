@@ -15,10 +15,14 @@ version = "1.0-SNAPSHOT"
 repositories {
     mavenCentral()
     jcenter()
+    flatDir {
+        dirs("libs")
+    }
 }
 
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
+    implementation(files("libs/ast-transformations-1.0-SNAPSHOT.zip"))
 }
 
 intellij {
