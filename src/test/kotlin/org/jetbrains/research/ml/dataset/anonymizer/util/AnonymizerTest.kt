@@ -31,7 +31,7 @@ open class AnonymizerTest(testDataRoot: String) : ParametrizedBaseTest(testDataR
     @Parameterized.Parameter(1)
     var outFile: File? = null
 
-    protected fun assertCodeAnonymization(inFile: File, outFile: File, anonymizer: Anonymizer){
+    protected fun assertCodeAnonymization(inFile: File, outFile: File, anonymizer: Anonymizer) {
         LOG.info("The current input file is: ${inFile.path}")
         LOG.info("The current output file is: ${outFile.path}")
         val expectedDf = DataFrame.readCSV(outFile.path)

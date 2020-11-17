@@ -8,9 +8,9 @@ import com.jetbrains.extensions.python.toPsi
 import org.jetbrains.research.ml.dataset.anonymizer.util.FileUtil
 import org.jetbrains.research.ml.dataset.anonymizer.util.FileUtil.createFile
 
-private fun getTmpDir() : String = System.getProperty("java.io.tmpdir")
+private fun getTmpDir(): String = System.getProperty("java.io.tmpdir")
 
-abstract class Anonymizer (private val tmpDataPath: String = getTmpDir()) {
+abstract class Anonymizer(private val tmpDataPath: String = getTmpDir()) {
     protected abstract val extension: FileUtil.Extension
     protected abstract val transformation: (PsiElement, Boolean) -> Unit
     protected abstract val project: Project

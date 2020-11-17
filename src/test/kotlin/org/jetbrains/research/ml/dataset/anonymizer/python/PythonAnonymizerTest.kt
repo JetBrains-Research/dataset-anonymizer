@@ -15,9 +15,8 @@ class PythonAnonymizerTest : AnonymizerTest(getResourcesRootPath(::PythonAnonymi
     }
 
     @Test
-    fun pythonAnonymizerTest(){
+    fun pythonAnonymizerTest() {
         val anonymizer = PythonAnonymizer(myFixture.project, testDataPath)
         assertCodeAnonymization(inFile!!, outFile!!, anonymizer)
     }
-
 }
