@@ -37,7 +37,6 @@ open class AnonymizerTest(testDataRoot: String) : ParametrizedBaseTest(testDataR
         val expectedDf = DataFrame.readCSV(outFile.path)
         LOG.info("The expected df is:\n$expectedDf")
         val actualDf = handleCsvFile(inFile.path, anonymizer)
-        // TODO: can we compare the dfs better?
-        TestCase.assertEquals(expectedDf.toString(), actualDf.toString())
+        TestCase.assertEquals(expectedDf, actualDf)
     }
 }
