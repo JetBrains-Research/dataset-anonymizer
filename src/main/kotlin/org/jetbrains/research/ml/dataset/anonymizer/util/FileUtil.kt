@@ -1,7 +1,11 @@
 package org.jetbrains.research.ml.dataset.anonymizer.util
 
 import com.intellij.openapi.application.ApplicationManager
+import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.io.FileUtil
+import com.intellij.openapi.vfs.LocalFileSystem
+import com.intellij.psi.PsiElement
+import com.jetbrains.extensions.python.toPsi
 import krangl.DataFrame
 import krangl.map
 import krangl.readCSV
@@ -48,8 +52,17 @@ object FileUtil {
         }
     }
 
+    fun getPsiElement(file: File, project: Project): PsiElement {
+        val virtualFile = LocalFileSystem.getInstance().refreshAndFindFileByIoFile(file)
+            ?: error("The virtual file ${file.path} was not created")
+        return ApplicationManager.getApplication().runReadAction<PsiElement> {
+            virtualFile.toPsi(project) as PsiElement
+        }
+    }
+
     enum class Extension(val value: String) {
         CSV(".csv"),
-        PY(".py")
+        PY(".py"),
+        JAVA(".java")
     }
 }

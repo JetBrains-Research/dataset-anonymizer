@@ -21,6 +21,9 @@ class TestFileFormat(private val prefix: String, private val extension: FileUtil
 
 object FileTestUtil {
 
+    val File.content: String
+        get() = this.readText().removeSuffix("\n")
+
     /**
      * We assume the format of the test files will be:
      *

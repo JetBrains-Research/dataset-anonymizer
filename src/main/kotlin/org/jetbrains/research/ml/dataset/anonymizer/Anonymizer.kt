@@ -4,9 +4,9 @@ import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.LocalFileSystem
 import com.intellij.psi.PsiElement
-import com.jetbrains.extensions.python.toPsi
 import org.jetbrains.research.ml.dataset.anonymizer.util.FileUtil
 import org.jetbrains.research.ml.dataset.anonymizer.util.FileUtil.createFile
+import org.jetbrains.research.ml.dataset.anonymizer.util.FileUtil.getPsiElement
 
 private fun getTmpDir(): String = System.getProperty("java.io.tmpdir")
 
@@ -18,11 +18,7 @@ abstract class Anonymizer(private val tmpDataPath: String = getTmpDir()) {
 
     fun anonymize(code: String): PsiElement {
         val file = createFile("$tmpDataPath/tmp_${counter}${extension.value}", code)
-        val virtualFile = LocalFileSystem.getInstance().refreshAndFindFileByIoFile(file)
-            ?: error("The virtual file ${file.path} was not created")
-        val psi = ApplicationManager.getApplication().runReadAction<PsiElement> {
-            virtualFile.toPsi(project) as PsiElement
-        }
+        val psi = getPsiElement(file, project)
         ApplicationManager.getApplication().invokeAndWait {
             transformations.forEach { it(psi, false) }
             ApplicationManager.getApplication().runWriteAction {

@@ -28,10 +28,9 @@ dependencies {
 }
 
 intellij {
-    type = "PC"
     version = "2020.2.3"
     downloadSources = false
-    setPlugins("PythonCore:202.7660.27")
+    setPlugins("com.intellij.java", "PythonCore:202.7660.27")
 }
 
 configure<JavaPluginConvention> {
