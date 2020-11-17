@@ -12,7 +12,7 @@ private fun getTmpDir(): String = System.getProperty("java.io.tmpdir")
 
 abstract class Anonymizer(private val tmpDataPath: String = getTmpDir()) {
     protected abstract val extension: FileUtil.Extension
-    protected abstract val transformation: (PsiElement, Boolean) -> Unit
+    protected abstract val transformations: List<(PsiElement, Boolean) -> Unit>
     protected abstract val project: Project
     private var counter: Int = 0
 
@@ -24,7 +24,7 @@ abstract class Anonymizer(private val tmpDataPath: String = getTmpDir()) {
             virtualFile.toPsi(project) as PsiElement
         }
         ApplicationManager.getApplication().invokeAndWait {
-            transformation(psi, false)
+            transformations.forEach { it(psi, false) }
             ApplicationManager.getApplication().runWriteAction {
                 com.intellij.openapi.util.io.FileUtil.delete(file)
             }
