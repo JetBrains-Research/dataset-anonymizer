@@ -1,0 +1,9 @@
+<idea-plugin>
+    <id>io.github.nbirillo.dataset.anonymizer</id>
+    <name>Dataset Anonymizer</name>
+    <vendor url="https://research.jetbrains.org/">JetBrains Research</vendor>
+
+    <description><![CDATA[
+    An IntelliJ-based IDE plugin for code anonymization in datasets.
+    ]]></description>
+</idea-plugin>
