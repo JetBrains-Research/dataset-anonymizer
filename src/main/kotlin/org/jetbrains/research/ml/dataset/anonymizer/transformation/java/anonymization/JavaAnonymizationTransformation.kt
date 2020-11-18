@@ -2,9 +2,11 @@ package org.jetbrains.research.ml.dataset.anonymizer.transformation.java.anonymi
 
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
-import com.jetbrains.python.psi.PyFile
 import org.jetbrains.research.ml.ast.transformations.Transformation
-import org.jetbrains.research.ml.ast.transformations.anonymization.AnonymizationVisitor
+import org.jetbrains.research.ml.dataset.anonymizer.transformation.util.TransformationUtil.applyAnonymization
+import org.jetbrains.research.ml.dataset.anonymizer.transformation.util.anonymization.BaseAnonymizationVisitor
+
+class JavaAnonymizationVisitor(file: PsiFile) : BaseAnonymizationVisitor(file, JavaElementAnonymizer())
 
 object JavaAnonymizationTransformation : Transformation {
     override val metadataKey: String
@@ -16,8 +18,7 @@ object JavaAnonymizationTransformation : Transformation {
 
     override fun apply(psiTree: PsiElement, toStoreMetadata: Boolean) {
         val visitor = JavaAnonymizationVisitor(psiTree.containingFile as PsiFile)
-        psiTree.accept(visitor)
-        visitor.performAllRenames()
+        applyAnonymization(psiTree, visitor)
     }
 
 }

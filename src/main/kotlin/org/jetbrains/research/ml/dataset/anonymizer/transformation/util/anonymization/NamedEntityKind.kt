@@ -1,4 +1,4 @@
-package org.jetbrains.research.ml.dataset.anonymizer.transformation.java.anonymization
+package org.jetbrains.research.ml.dataset.anonymizer.transformation.util.anonymization
 
 import com.intellij.psi.*
 
