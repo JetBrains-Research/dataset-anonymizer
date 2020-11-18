@@ -2,7 +2,6 @@ package org.jetbrains.research.ml.dataset.anonymizer.transformation.java
 
 import com.intellij.psi.PsiComment
 import com.intellij.psi.PsiElement
-import com.intellij.psi.javadoc.PsiDocComment
 import com.intellij.psi.javadoc.PsiDocToken
 import com.intellij.psi.util.PsiTreeUtil
 import org.jetbrains.research.ml.ast.transformations.Transformation
