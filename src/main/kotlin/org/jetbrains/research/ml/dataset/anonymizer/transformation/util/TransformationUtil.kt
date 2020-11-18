@@ -4,6 +4,7 @@ import com.intellij.psi.PsiComment
 import com.intellij.psi.PsiElement
 import com.intellij.psi.util.PsiTreeUtil
 import org.jetbrains.research.ml.ast.transformations.util.PsiUtil
+import org.jetbrains.research.ml.dataset.anonymizer.transformation.util.commentsRemoval.CommentsRemovalVisitor
 
 object TransformationUtil {
     fun applyCommentsRemoval(psiTree: PsiElement, visitor: CommentsRemovalVisitor, psiDoc: Class<out PsiElement>) {

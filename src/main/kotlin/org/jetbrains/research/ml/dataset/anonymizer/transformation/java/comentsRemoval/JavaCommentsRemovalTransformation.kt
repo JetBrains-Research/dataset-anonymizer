@@ -1,4 +1,4 @@
-package org.jetbrains.research.ml.dataset.anonymizer.transformation.java
+package org.jetbrains.research.ml.dataset.anonymizer.transformation.java.comentsRemoval
 
 import com.intellij.psi.PsiElement
 import com.intellij.psi.javadoc.PsiDocToken

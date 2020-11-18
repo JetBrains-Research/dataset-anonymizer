@@ -1,8 +1,8 @@
-package org.jetbrains.research.ml.dataset.anonymizer.transformation.kotlin
+package org.jetbrains.research.ml.dataset.anonymizer.transformation.kotlin.comentsRemoval
 
 import com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.kdoc.psi.api.KDoc
-import org.jetbrains.research.ml.dataset.anonymizer.transformation.util.CommentsRemovalVisitor
+import org.jetbrains.research.ml.dataset.anonymizer.transformation.util.commentsRemoval.CommentsRemovalVisitor
 
 class KotlinCommentsRemovalVisitor : CommentsRemovalVisitor() {
     override fun visitElement(element: PsiElement) {

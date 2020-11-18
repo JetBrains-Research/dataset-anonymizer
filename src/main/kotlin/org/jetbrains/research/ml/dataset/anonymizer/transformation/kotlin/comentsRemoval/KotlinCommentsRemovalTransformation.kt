@@ -1,4 +1,4 @@
-package org.jetbrains.research.ml.dataset.anonymizer.transformation.kotlin
+package org.jetbrains.research.ml.dataset.anonymizer.transformation.kotlin.comentsRemoval
 
 import com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.kdoc.psi.api.KDoc

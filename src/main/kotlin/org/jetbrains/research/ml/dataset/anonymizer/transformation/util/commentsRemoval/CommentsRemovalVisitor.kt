@@ -1,4 +1,4 @@
-package org.jetbrains.research.ml.dataset.anonymizer.transformation.util
+package org.jetbrains.research.ml.dataset.anonymizer.transformation.util.commentsRemoval
 
 import com.intellij.psi.PsiComment
 import com.intellij.psi.PsiElementVisitor
