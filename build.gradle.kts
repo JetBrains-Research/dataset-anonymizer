@@ -30,7 +30,7 @@ dependencies {
 intellij {
     version = "2020.2.3"
     downloadSources = false
-    setPlugins("com.intellij.java", "PythonCore:202.7660.27")
+    setPlugins("com.intellij.java", "PythonCore:202.7660.27", "org.jetbrains.kotlin:1.3.72-release-IJ2020.1-1")
 }
 
 configure<JavaPluginConvention> {
