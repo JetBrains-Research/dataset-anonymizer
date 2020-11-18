@@ -20,5 +20,4 @@ object JavaAnonymizationTransformation : Transformation {
         val visitor = JavaAnonymizationVisitor(psiTree.containingFile as PsiFile)
         applyAnonymization(psiTree, visitor)
     }
-
 }

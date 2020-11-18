@@ -6,7 +6,8 @@ import com.intellij.psi.PsiFile
 import com.intellij.psi.PsiRecursiveElementVisitor
 import org.jetbrains.research.ml.ast.transformations.anonymization.RenameUtil.renameElementDelayed
 
-open class BaseAnonymizationVisitor(file: PsiFile, private val anonymizer: BaseElementAnonymizer) : PsiRecursiveElementVisitor() {
+open class BaseAnonymizationVisitor(file: PsiFile, private val anonymizer: BaseElementAnonymizer) :
+    PsiRecursiveElementVisitor() {
     private val project = file.project
 
     override fun visitElement(element: PsiElement) {

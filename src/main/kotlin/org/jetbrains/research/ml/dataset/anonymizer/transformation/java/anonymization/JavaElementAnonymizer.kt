@@ -5,7 +5,7 @@ import com.intellij.psi.impl.PsiSuperMethodImplUtil
 import org.jetbrains.research.ml.dataset.anonymizer.transformation.util.anonymization.BaseElementAnonymizer
 import kotlin.test.fail
 
-class JavaElementAnonymizer: BaseElementAnonymizer() {
+class JavaElementAnonymizer : BaseElementAnonymizer() {
     override fun handleNotDefinition(element: PsiElement): String? {
         return when (element) {
             is PsiParameterList -> getPrefix(computeParentOfDefinition(element), false)
@@ -45,5 +45,4 @@ class JavaElementAnonymizer: BaseElementAnonymizer() {
         // TODO: check if the class or function is from a library
         return true
     }
-
 }

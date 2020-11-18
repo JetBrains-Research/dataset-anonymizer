@@ -1,13 +1,9 @@
 package org.jetbrains.research.ml.dataset.anonymizer.transformation.util.anonymization
 
 import com.intellij.psi.*
-import com.intellij.psi.impl.PsiSuperMethodImplUtil
 import com.intellij.psi.search.LocalSearchScope
 import com.intellij.psi.search.searches.ReferencesSearch
 import com.intellij.psi.util.parentOfType
-import org.jetbrains.research.ml.dataset.anonymizer.transformation.util.anonymization.NamedEntityKind
-import org.jetbrains.research.ml.dataset.anonymizer.transformation.util.anonymization.NamedEntityKindCounter
-import kotlin.test.fail
 
 // TODO: it does not work with lambda
 abstract class BaseElementAnonymizer {
