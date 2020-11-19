@@ -13,42 +13,6 @@ enum class NamedEntityKind(val prefix: String) {
     Parameter("p"),
     Interface("i"),
     Lambda("l");
-    companion object {
-        private fun PsiMember.isStatic(): Boolean {
-            return this.modifierList != null && this.modifierList!!.hasModifierProperty("static")
-        }
-
-        fun getElementKind(element: PsiElement): NamedEntityKind? = when (element) {
-            is PsiMethod -> {
-                if (element.isConstructor) {
-                    Constructor
-                } else {
-                    if (element.isStatic()) {
-                        StaticFunction
-                    } else {
-                        Function
-                    }
-                }
-            }
-            is PsiField -> {
-                if (element.isStatic()) {
-                    StaticField
-                } else {
-                    Field
-                }
-            }
-            is PsiClass -> {
-                if (element.isInterface) {
-                    Interface
-                } else {
-                    Class
-                }
-            }
-            is PsiParameter -> Parameter
-            is PsiLocalVariable -> Variable
-            else -> null
-        }
-    }
 }
 
 class NamedEntityKindCounter {

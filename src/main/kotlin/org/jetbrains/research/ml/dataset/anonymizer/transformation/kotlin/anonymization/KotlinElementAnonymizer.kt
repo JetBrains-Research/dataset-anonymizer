@@ -1,27 +1,31 @@
-package org.jetbrains.research.ml.dataset.anonymizer.transformation.java.anonymization
+package org.jetbrains.research.ml.dataset.anonymizer.transformation.kotlin.anonymization
 
 import com.intellij.psi.*
 import com.intellij.psi.impl.PsiSuperMethodImplUtil
+import com.intellij.psi.search.LocalSearchScope
+import com.intellij.psi.util.parentOfType
+import org.jetbrains.kotlin.psi.*
 import org.jetbrains.research.ml.dataset.anonymizer.transformation.util.anonymization.BaseElementAnonymizer
 import org.jetbrains.research.ml.dataset.anonymizer.transformation.util.anonymization.NamedEntityKind
 
-class JavaElementAnonymizer : BaseElementAnonymizer() {
+class KotlinElementAnonymizer : BaseElementAnonymizer() {
 
     private fun PsiMember.isStatic(): Boolean {
         return this.modifierList != null && this.modifierList!!.hasModifierProperty("static")
     }
 
     override fun getElementKind(element: PsiElement): NamedEntityKind? = when (element) {
-        is PsiMethod -> {
-            if (element.isConstructor) {
-                NamedEntityKind.Constructor
-            } else {
-                if (element.isStatic()) {
-                    NamedEntityKind.StaticFunction
-                } else {
-                    NamedEntityKind.Function
-                }
-            }
+        is KtFunction -> {
+//            if (element.) {
+//                NamedEntityKind.Constructor
+//            } else {
+//                if (element.isStatic()) {
+//                    NamedEntityKind.StaticFunction
+//                } else {
+//                    NamedEntityKind.Function
+//                }
+//            }
+            NamedEntityKind.Function
         }
         is PsiField -> {
             if (element.isStatic()) {
@@ -30,21 +34,21 @@ class JavaElementAnonymizer : BaseElementAnonymizer() {
                 NamedEntityKind.Field
             }
         }
-        is PsiClass -> {
-            if (element.isInterface) {
+        is KtClass -> {
+            if (element.isInterface()) {
                 NamedEntityKind.Interface
             } else {
                 NamedEntityKind.Class
             }
         }
-        is PsiParameter -> NamedEntityKind.Parameter
-        is PsiLocalVariable -> NamedEntityKind.Variable
+        is KtParameter -> NamedEntityKind.Parameter
+        is KtProperty -> NamedEntityKind.Variable
         else -> null
     }
 
     override fun handleNotDefinition(element: PsiElement): String? {
         return when (element) {
-            is PsiMethod -> getNewNameForElement(PsiSuperMethodImplUtil.findDeepestSuperMethod(element)!!)
+            is KtFunction -> getNewNameForElement(PsiSuperMethodImplUtil.findDeepestSuperMethod(element as PsiMethod)!!)
             is PsiLambdaExpression -> assembleNewFullName(computeParentOfDefinition(element), NamedEntityKind.Lambda)
             else -> getPrefix(computeParentOfDefinition(element), false)
         }
@@ -59,19 +63,19 @@ class JavaElementAnonymizer : BaseElementAnonymizer() {
     }
 
     override fun isDefinition(element: PsiElement, toCheckBaseMethod: Boolean): Boolean {
-        fun PsiMethod.isBaseMethod(toCheckSuperMethod: Boolean): Boolean =
-            !toCheckSuperMethod || PsiSuperMethodImplUtil.findDeepestSuperMethod(this) == null
+        fun KtFunction.isBaseMethod(toCheckSuperMethod: Boolean): Boolean =
+            !toCheckSuperMethod
 
-        return element is PsiClass ||
+        return element is KtClass ||
             // Only consider the base method the definition
-            element is PsiMethod && element.isBaseMethod(toCheckBaseMethod) ||
-            element is PsiField ||
-            element is PsiParameter ||
-            element is PsiLocalVariable && element.parent is PsiDeclarationStatement
+            element is KtFunction ||
+//            element is PsiField ||
+            element is KtParameter ||
+            element is KtProperty
     }
 
     override fun shouldRenameDefinition(definition: PsiElement): Boolean {
-        (definition as? PsiMethod)?.let {
+        (definition as? KtFunction)?.let {
             if (definition.name in listOf("equals", "main", "hashCode", "toString")) {
                 return false
             }
@@ -79,4 +83,10 @@ class JavaElementAnonymizer : BaseElementAnonymizer() {
         // TODO: check if the class or function is from a library
         return true
     }
+
+    override fun isElementGlobal(element: PsiElement): Boolean =
+        element.parentOfType<KtClass>() == null &&
+            element !is KtParameter &&
+            element.useScope !is LocalSearchScope &&
+            element.parentOfType<KtLambdaExpression>() == null
 }

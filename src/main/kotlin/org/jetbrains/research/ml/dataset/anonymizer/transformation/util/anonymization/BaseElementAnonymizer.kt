@@ -10,6 +10,8 @@ abstract class BaseElementAnonymizer {
     private val elementToNewName: MutableMap<PsiElement, String?> = mutableMapOf()
     private val parentToKindCounter: MutableMap<PsiElement?, NamedEntityKindCounter> = mutableMapOf()
 
+    abstract fun getElementKind(element: PsiElement): NamedEntityKind?
+
     fun registerElement(element: PsiElement) {
         if (isDefinition(element)) {
             elementToNewName.getOrPut(element) {
@@ -40,7 +42,7 @@ abstract class BaseElementAnonymizer {
         }
         if (!shouldRenameDefinition(element)) return null
         val parent = computeParentOfDefinition(element)
-        val definitionKind = NamedEntityKind.getElementKind(element) ?: return null
+        val definitionKind = getElementKind(element) ?: return null
         return assembleNewFullName(parent, definitionKind).also { newName ->
             for (reference in ReferencesSearch.search(element, element.useScope)) {
                 elementToNewName[reference.element] = newName
@@ -67,7 +69,7 @@ abstract class BaseElementAnonymizer {
         return "$prefix${kind.prefix}$kindCount"
     }
 
-    protected fun isElementGlobal(element: PsiElement): Boolean =
+    protected open fun isElementGlobal(element: PsiElement): Boolean =
         element.parentOfType<PsiClass>() == null &&
             element !is PsiParameter &&
             element.useScope !is LocalSearchScope &&
