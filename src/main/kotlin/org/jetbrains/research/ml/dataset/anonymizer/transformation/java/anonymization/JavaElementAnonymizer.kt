@@ -3,16 +3,14 @@ package org.jetbrains.research.ml.dataset.anonymizer.transformation.java.anonymi
 import com.intellij.psi.*
 import com.intellij.psi.impl.PsiSuperMethodImplUtil
 import org.jetbrains.research.ml.dataset.anonymizer.transformation.util.anonymization.BaseElementAnonymizer
-import kotlin.test.fail
+import org.jetbrains.research.ml.dataset.anonymizer.transformation.util.anonymization.NamedEntityKind
 
 class JavaElementAnonymizer : BaseElementAnonymizer() {
     override fun handleNotDefinition(element: PsiElement): String? {
         return when (element) {
-            is PsiParameterList -> getPrefix(computeParentOfDefinition(element), false)
             is PsiMethod -> getNewNameForElement(PsiSuperMethodImplUtil.findDeepestSuperMethod(element)!!)
-            is PsiCodeBlock -> getPrefix(computeParentOfDefinition(element), false)
-            is PsiDeclarationStatement -> getPrefix(computeParentOfDefinition(element), false)
-            else -> fail("A new name for a non-definition requested")
+            is PsiLambdaExpression -> assembleNewFullName(computeParentOfDefinition(element), NamedEntityKind.Lambda)
+            else -> getPrefix(computeParentOfDefinition(element), false)
         }
     }
 

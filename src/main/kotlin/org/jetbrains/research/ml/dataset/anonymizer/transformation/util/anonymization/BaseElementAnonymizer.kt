@@ -5,7 +5,6 @@ import com.intellij.psi.search.LocalSearchScope
 import com.intellij.psi.search.searches.ReferencesSearch
 import com.intellij.psi.util.parentOfType
 
-// TODO: it does not work with lambda
 abstract class BaseElementAnonymizer {
     private val allRenames: MutableList<Pair<PsiElement, String>> = mutableListOf()
     private val elementToNewName: MutableMap<PsiElement, String?> = mutableMapOf()
@@ -62,7 +61,7 @@ abstract class BaseElementAnonymizer {
         } ?: ""
     }
 
-    private fun assembleNewFullName(parent: PsiElement?, kind: NamedEntityKind): String {
+    protected fun assembleNewFullName(parent: PsiElement?, kind: NamedEntityKind): String {
         val prefix = getPrefix(parent)
         val kindCount = parentToKindCounter.getOrPut(parent) { NamedEntityKindCounter() }.next(kind)
         return "$prefix${kind.prefix}$kindCount"
