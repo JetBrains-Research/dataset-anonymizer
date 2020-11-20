@@ -7,7 +7,6 @@ enum class NamedEntityKind(val prefix: String) {
     StaticFunction("sf"),
     Variable("v"),
     Class("c"),
-    Constructor("init"),
     Field("f"),
     StaticField("sf"),
     Parameter("p"),
@@ -20,14 +19,10 @@ enum class NamedEntityKind(val prefix: String) {
 
         fun getElementKind(element: PsiElement): NamedEntityKind? = when (element) {
             is PsiMethod -> {
-                if (element.isConstructor) {
-                    Constructor
+                if (element.isStatic()) {
+                    StaticFunction
                 } else {
-                    if (element.isStatic()) {
-                        StaticFunction
-                    } else {
-                        Function
-                    }
+                    Function
                 }
             }
             is PsiField -> {

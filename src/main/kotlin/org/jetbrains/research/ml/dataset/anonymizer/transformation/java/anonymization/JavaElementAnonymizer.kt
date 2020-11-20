@@ -8,7 +8,13 @@ import org.jetbrains.research.ml.dataset.anonymizer.transformation.util.anonymiz
 class JavaElementAnonymizer : BaseElementAnonymizer() {
     override fun handleNotDefinition(element: PsiElement): String? {
         return when (element) {
-            is PsiMethod -> getNewNameForElement(PsiSuperMethodImplUtil.findDeepestSuperMethod(element)!!)
+            is PsiMethod -> {
+                if (element.isConstructor) {
+                    getPrefix(computeParentOfDefinition(element), false)
+                } else {
+                    getNewNameForElement(PsiSuperMethodImplUtil.findDeepestSuperMethod(element)!!)
+                }
+            }
             is PsiLambdaExpression -> assembleNewFullName(computeParentOfDefinition(element), NamedEntityKind.Lambda)
             else -> getPrefix(computeParentOfDefinition(element), false)
         }
@@ -28,7 +34,7 @@ class JavaElementAnonymizer : BaseElementAnonymizer() {
 
         return element is PsiClass ||
             // Only consider the base method the definition
-            element is PsiMethod && element.isBaseMethod(toCheckBaseMethod) ||
+            element is PsiMethod && element.isBaseMethod(toCheckBaseMethod) && !element.isConstructor ||
             element is PsiField ||
             element is PsiParameter ||
             element is PsiLocalVariable && element.parent is PsiDeclarationStatement
