@@ -15,7 +15,7 @@ open class BaseAnonymizationVisitor(file: PsiFile, private val anonymizer: BaseE
         super.visitElement(element)
     }
 
-    // TODO: it does not work for implements something now: see Java tests: classes_and_methods/out_2.java
+    // TODO: it does not work for "implements something" construction now: see Java tests: classes_and_methods/out_2.java
     open fun performAllRenames() {
         val renames = anonymizer.getAllRenames().map { renameElementDelayed(it.first, it.second) }
         WriteCommandAction.runWriteCommandAction(project) {
