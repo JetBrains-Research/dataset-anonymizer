@@ -19,5 +19,6 @@ fun createFile(path: String, content: String = ""): File {
 
 enum class Extension(val value: String) {
     CSV(".csv"),
-    PY(".py");
+    PY(".py"),
+    JAVA(".java");
 }
