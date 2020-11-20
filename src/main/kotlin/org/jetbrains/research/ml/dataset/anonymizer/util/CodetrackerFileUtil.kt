@@ -1,11 +1,15 @@
 package org.jetbrains.research.ml.dataset.anonymizer.util
 
-object CodetrackerFileUtil {
-    enum class Column(val key: String) {
-        FRAGMENT("fragment")
-    }
+enum class Column(val key: String) {
+    FRAGMENT("fragment")
+}
 
-    enum class Language(val value: String) {
-        PYTHON("python")
-    }
+enum class Language(val value: String) {
+    PYTHON("python");
+
+    val extension: Extension
+        get() = when (this) {
+            PYTHON -> Extension.PY
+            else -> error("Not implemented")
+        }
 }
