@@ -42,7 +42,7 @@ abstract class Anonymizer(private val tmpDataPath: String = getTmpDir()) {
     }
 
     /**
-     * The root folder need have the following structure:
+     * The root folder need to have the following structure:
      * -root
      * --language
      * ---taskN1
