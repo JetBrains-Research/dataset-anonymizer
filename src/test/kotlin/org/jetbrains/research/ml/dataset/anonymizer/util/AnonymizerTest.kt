@@ -4,7 +4,6 @@ import junit.framework.TestCase
 import krangl.DataFrame
 import krangl.readCSV
 import org.jetbrains.research.ml.dataset.anonymizer.Anonymizer
-import org.jetbrains.research.ml.dataset.anonymizer.util.FileUtil.handleCsvFile
 import org.junit.Ignore
 import org.junit.runners.Parameterized
 import java.io.File
@@ -36,7 +35,7 @@ open class AnonymizerTest(testDataRoot: String) : ParametrizedBaseTest(testDataR
         LOG.info("The current output file is: ${outFile.path}")
         val expectedDf = DataFrame.readCSV(outFile.path)
         LOG.info("The expected df is:\n$expectedDf")
-        val actualDf = handleCsvFile(inFile.path, anonymizer)
+        val actualDf = anonymizer.anonymizeCsvFile(inFile.path)
         TestCase.assertEquals(expectedDf, actualDf)
     }
 }
