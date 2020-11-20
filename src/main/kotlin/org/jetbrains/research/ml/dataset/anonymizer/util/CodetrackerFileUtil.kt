@@ -5,11 +5,13 @@ enum class Column(val key: String) {
 }
 
 enum class Language(val value: String) {
-    PYTHON("python");
+    PYTHON("python"),
+    JAVA("java");
 
     val extension: Extension
         get() = when (this) {
             PYTHON -> Extension.PY
+            JAVA -> Extension.JAVA
             else -> error("Not implemented")
         }
 }

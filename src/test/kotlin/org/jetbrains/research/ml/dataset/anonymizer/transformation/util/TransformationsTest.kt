@@ -24,8 +24,8 @@ open class TransformationsTest(testDataRoot: String) : ParametrizedBaseTest(test
         fun getInAndOutArray(
             cls: KFunction<TransformationsTest>,
             resourcesRootName: String = resourcesRoot,
-            inFormat: TestFileFormat = TestFileFormat("in", FileUtil.Extension.JAVA, Type.Input),
-            outFormat: TestFileFormat = TestFileFormat("out", FileUtil.Extension.JAVA, Type.Output)
+            inFormat: TestFileFormat = TestFileFormat("in", Extension.JAVA, Type.Input),
+            outFormat: TestFileFormat = TestFileFormat("out", Extension.JAVA, Type.Output)
         ): List<Array<File>> {
             val inAndOutFilesMap = FileTestUtil.getInAndOutFilesMap(
                 getResourcesRootPath(cls, resourcesRootName),
