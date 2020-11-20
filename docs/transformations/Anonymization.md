@@ -26,7 +26,6 @@ Each named entity is renamed to have the form
     | `sf`   | Static (or Companion Object) function         |
     | `v`    | Variable                                      |
     | `c`    | Class                                         |
-    | `init` | Constructor                                   |
     | `f`    | Field                                         |
     | `sf`   | Static (or Companion Object) field            |
     | `p`    | Parameter                                     |
