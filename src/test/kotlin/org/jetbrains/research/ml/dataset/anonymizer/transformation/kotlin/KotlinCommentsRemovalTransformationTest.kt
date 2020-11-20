@@ -1,7 +1,7 @@
 package org.jetbrains.research.ml.dataset.anonymizer.transformation.kotlin
 
 import org.jetbrains.research.ml.dataset.anonymizer.transformation.util.TransformationsTest
-import org.jetbrains.research.ml.dataset.anonymizer.util.FileUtil
+import org.jetbrains.research.ml.dataset.anonymizer.util.Extension
 import org.jetbrains.research.ml.dataset.anonymizer.util.TestFileFormat
 import org.jetbrains.research.ml.dataset.anonymizer.util.Type
 import org.junit.Test
@@ -16,8 +16,8 @@ class KotlinCommentsRemovalTransformationTest :
         @Parameterized.Parameters(name = "{index}: ({0}, {1})")
         fun getTestData() = getInAndOutArray(
             ::KotlinCommentsRemovalTransformationTest,
-            inFormat = TestFileFormat("in", FileUtil.Extension.KOTLIN, Type.Input),
-            outFormat = TestFileFormat("out", FileUtil.Extension.KOTLIN, Type.Output)
+            inFormat = TestFileFormat("in", Extension.KOTLIN, Type.Input),
+            outFormat = TestFileFormat("out", Extension.KOTLIN, Type.Output)
         )
     }
 

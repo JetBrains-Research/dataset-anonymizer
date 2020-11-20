@@ -10,7 +10,6 @@ object TransformationUtil {
         val comments = PsiTreeUtil.collectElementsOfType(psiTree, PsiComment::class.java)
         val docs = PsiTreeUtil.collectElementsOfType(psiTree, psiDoc)
 
-        PsiUtil.acceptStatements(psiTree.project, comments, visitor)
-        PsiUtil.acceptStatements(psiTree.project, docs, visitor)
+        PsiUtil.acceptStatements(psiTree.project, comments + docs, visitor)
     }
 }
