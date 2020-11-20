@@ -1,4 +1,4 @@
-package org.jetbrains.research.ml.dataset.anonymizer.transformation.java
+package org.jetbrains.research.ml.dataset.anonymizer.transformation.java.comentsRemoval
 
 import org.jetbrains.research.ml.dataset.anonymizer.transformation.util.TransformationsTest
 import org.junit.Test

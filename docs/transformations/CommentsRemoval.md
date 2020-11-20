@@ -1,8 +1,8 @@
-# Java Comments Removal
+# Java/Kotlin Comments Removal
 
 ## Overview
 
-This transformation deletes all comments in the Java code. 
+This transformation deletes all comments in the Java and Kotlin code. 
 
 ## Algorithm
 
@@ -14,7 +14,7 @@ Find all comments and delete them. The supported comments type:
 
 - [x] Documentation comment with using `/**...*/`
 
-## Examples
+## Examples (in Java, for Kotlin they are similar))
 
 <details><summary>Single line comment example</summary>
 <p>

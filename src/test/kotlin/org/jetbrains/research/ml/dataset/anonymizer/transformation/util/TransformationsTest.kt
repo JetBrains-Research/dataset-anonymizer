@@ -1,9 +1,13 @@
 package org.jetbrains.research.ml.dataset.anonymizer.transformation.util
 
 import com.intellij.openapi.application.ApplicationManager
+import com.intellij.openapi.command.WriteCommandAction
 import com.intellij.psi.PsiElement
+import com.intellij.psi.PsiFile
+import com.intellij.psi.codeStyle.CodeStyleManager
+import com.intellij.testFramework.PsiTestUtil
 import org.jetbrains.research.ml.dataset.anonymizer.util.*
-import org.jetbrains.research.ml.dataset.anonymizer.util.FileTestUtil.content
+import org.junit.Before
 import org.junit.Ignore
 import org.junit.runners.Parameterized
 import java.io.File
@@ -11,6 +15,8 @@ import kotlin.reflect.KFunction
 
 @Ignore
 open class TransformationsTest(testDataRoot: String) : ParametrizedBaseTest(testDataRoot) {
+
+    lateinit var codeStyleManager: CodeStyleManager
 
     @JvmField
     @Parameterized.Parameter(0)
@@ -36,6 +42,12 @@ open class TransformationsTest(testDataRoot: String) : ParametrizedBaseTest(test
         }
     }
 
+    @Before
+    override fun mySetUp() {
+        super.setUp()
+        codeStyleManager = CodeStyleManager.getInstance(project)
+    }
+
     protected fun assertCodeTransformation(
         inFile: File,
         outFile: File,
@@ -43,15 +55,29 @@ open class TransformationsTest(testDataRoot: String) : ParametrizedBaseTest(test
     ) {
         LOG.info("The current input file is: ${inFile.path}")
         LOG.info("The current output file is: ${outFile.path}")
-        val expectedSrc = outFile.content
+        val expectedSrc = getPsiFile(outFile).text
         LOG.info("The expected code is:\n$expectedSrc")
-        val psiInElement = myFixture.configureByFile(inFile.path)
+        val psiInElement = getPsiFile(inFile)
         ApplicationManager.getApplication().invokeAndWait {
             transformation(psiInElement, true)
-//            PsiTestUtil.checkFileStructure(psiInElement)
+            PsiTestUtil.checkFileStructure(psiInElement)
         }
         val actualSrc = psiInElement.text
         LOG.info("The actual code is:\n$actualSrc")
         assertEquals(expectedSrc, actualSrc)
+    }
+
+    private fun getPsiFile(file: File, toReformatCode: Boolean = true): PsiFile {
+        val psi = myFixture.configureByFile(file.path)
+        if (toReformatCode) {
+            formatPsiFile(psi)
+        }
+        return psi
+    }
+
+    private fun formatPsiFile(psi: PsiElement) {
+        WriteCommandAction.runWriteCommandAction(project) { // reformat the expected file
+            codeStyleManager.reformat(psi)
+        }
     }
 }
