@@ -1,9 +1,11 @@
 package org.jetbrains.research.ml.dataset.anonymizer.transformation.util.anonymization
 
 import com.intellij.openapi.command.WriteCommandAction
+import com.intellij.openapi.project.Project
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import com.intellij.psi.PsiRecursiveElementVisitor
+import com.intellij.psi.search.PsiSearchHelper
 import com.intellij.psi.search.SearchScope
 import com.intellij.psi.search.SearchScopeProvider
 //import org.jetbrains.research.ml.ast.transformations.anonymization.RenameUtil.renameElementDelayed
@@ -28,7 +30,7 @@ open class BaseAnonymizationVisitor(file: PsiFile, private val anonymizer: BaseE
 
     // TODO: it does not work for implements something now: see Java tests: classes_and_methods/out_2.java
     open fun performAllRenames() {
-        val renames = anonymizer.getAllRenames().map { renameElementDelayed(it.first, it.second) }
+        val renames = anonymizer.getAllRenames().map { renameElementDelayed(it.first, it.second, project) }
         WriteCommandAction.runWriteCommandAction(project) {
             renames.forEach { it() }
         }
@@ -36,31 +38,21 @@ open class BaseAnonymizationVisitor(file: PsiFile, private val anonymizer: BaseE
 }
 
 object RenameUtil {
-    fun renameElementDelayed(definition: PsiElement, newName: String): () -> Unit {
-        val processor = when(definition) {
-            is KtParameter -> RenameKotlinParameterProcessor()
-            is KtFunction -> RenameKotlinFunctionProcessor()
-            is KtProperty -> RenameKotlinPropertyProcessor()
-            is KtTypeParameter -> RenameKotlinTypeParameterProcessor()
-            else -> forElement(definition)
-        }
+    fun renameElementDelayed(definition: PsiElement, newName: String, project: Project): () -> Unit {
+        val processor = forElement(definition)
         val allRenames = mutableMapOf(definition to newName)
-        processor.prepareRenaming(definition, newName, allRenames, definition.useScope)
-        val delayedRenames = allRenames.map { renameSingleElementDelayed(it.key, it.value) }
+        processor.prepareRenaming(definition, newName, allRenames)
+        val delayedRenames = allRenames.map { renameSingleElementDelayed(it.key, it.value, project) }
         return { delayedRenames.forEach { it() } }
     }
 
-    private fun renameSingleElementDelayed(definition: PsiElement, newName: String): () -> Unit {
-        val processor = when(definition) {
-            is KtParameter -> RenameKotlinParameterProcessor()
-            is KtFunction -> RenameKotlinFunctionProcessor()
-            is KtProperty -> RenameKotlinPropertyProcessor()
-            is KtTypeParameter -> RenameKotlinTypeParameterProcessor()
-            else -> forElement(definition)
-        }
-        val useScope = definition.useScope
+    private fun renameSingleElementDelayed(definition: PsiElement, newName: String, project: Project): () -> Unit {
+        val processor = forElement(definition)
+        val useScope = PsiSearchHelper.getInstance(project).getUseScope(definition)
         val references = processor.findReferences(definition, useScope, false)
         val usages = references.map { UsageInfo(it) }.toTypedArray()
+
+//        usages.map { processor.renameElement(it.element!!.parent.parent, newName, emptyList<UsageInfo>().toTypedArray(), null) }
 
         return { processor.renameElement(definition, newName, usages, null) }
     }
