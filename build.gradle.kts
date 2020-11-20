@@ -22,14 +22,15 @@ repositories {
 
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
-    implementation(files("libs/ast-transformations-1.0-SNAPSHOT.zip"))
+    // TODO: publish transformation plugin
+    implementation(fileTree("libs") { include("*.jar") })
+    implementation("de.mpicbg.scicomp:krangl:0.9.1")
 }
 
 intellij {
-    type = "PC"
     version = "2020.2.3"
     downloadSources = false
-    setPlugins("PythonCore:202.7660.27")
+    setPlugins("com.intellij.java", "PythonCore:202.7660.27")
 }
 
 configure<JavaPluginConvention> {
