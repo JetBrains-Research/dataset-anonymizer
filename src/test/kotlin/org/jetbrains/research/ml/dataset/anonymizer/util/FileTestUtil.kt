@@ -6,7 +6,7 @@ enum class Type {
     Input, Output
 }
 
-class TestFileFormat(private val prefix: String, private val extension: FileUtil.Extension, val type: Type) {
+class TestFileFormat(private val prefix: String, private val extension: Extension, val type: Type) {
     data class TestFile(val file: File, val type: Type, val number: Number)
 
     fun check(file: File): TestFile? {
@@ -34,8 +34,8 @@ object FileTestUtil {
      */
     fun getInAndOutFilesMap(
         folder: String,
-        inFormat: TestFileFormat = TestFileFormat("in", FileUtil.Extension.CSV, Type.Input),
-        outFormat: TestFileFormat = TestFileFormat("out", FileUtil.Extension.CSV, Type.Output)
+        inFormat: TestFileFormat = TestFileFormat("in", Extension.CSV, Type.Input),
+        outFormat: TestFileFormat = TestFileFormat("out", Extension.CSV, Type.Output)
     ): Map<File, File> {
         val (files, folders) = File(folder).listFiles().orEmpty().partition { it.isFile }
 //      Process files in the given folder
