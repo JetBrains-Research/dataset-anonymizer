@@ -15,7 +15,7 @@ open class AnonymizerTest(testDataRoot: String) : ParametrizedBaseTest(testDataR
     companion object {
         fun getInAndOutArray(
             cls: KFunction<AnonymizerTest>,
-            resourcesRootName: String = resourcesRoot,
+            resourcesRootName: String = resourcesRoot
         ): List<Array<File>> {
             val inAndOutFilesMap = FileTestUtil.getInAndOutFilesMap(getResourcesRootPath(cls, resourcesRootName))
             return inAndOutFilesMap.entries.map { (inFile, outFile) -> arrayOf(inFile, outFile) }

@@ -15,15 +15,15 @@ import org.jetbrains.research.ml.dataset.anonymizer.util.Language
 import org.jetbrains.research.ml.dataset.anonymizer.util.createFile
 import java.io.File
 
-private fun getTmpDir(): String = System.getProperty("java.io.tmpdir")
+fun getTmpProjectDir(): String = "${System.getProperty("java.io.tmpdir")}/tmpProject"
 
-abstract class Anonymizer(private val tmpDataPath: String = getTmpDir()) {
+abstract class Anonymizer(private val tmpDataPath: String = getTmpProjectDir()) {
     protected abstract val language: Language
     protected abstract val transformations: List<(PsiElement, Boolean) -> Unit>
     protected abstract val project: Project
     private var counter: Int = 0
 
-    fun anonymize(code: String): PsiElement {
+    protected fun anonymize(code: String): PsiElement {
         val file = createFile("$tmpDataPath/tmp_${counter}${language.extension.value}", code)
         val virtualFile = LocalFileSystem.getInstance().refreshAndFindFileByIoFile(file)
             ?: error("The virtual file ${file.path} was not created")
