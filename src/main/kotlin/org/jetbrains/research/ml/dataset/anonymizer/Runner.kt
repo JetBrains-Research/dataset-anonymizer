@@ -6,40 +6,13 @@ import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.project.Project
 import com.xenomachina.argparser.ArgParser
 import com.xenomachina.argparser.SystemExitException
-import org.jetbrains.research.ml.dataset.anonymizer.util.Language
-import java.io.File
-import java.lang.IllegalArgumentException
-import java.nio.file.Path
+import org.jetbrains.research.ml.dataset.anonymizer.java.JavaAnonymizer
+import org.jetbrains.research.ml.dataset.anonymizer.kotlin.KotlinAnonymizer
+import org.jetbrains.research.ml.dataset.anonymizer.python.PythonAnonymizer
 import java.nio.file.Paths
 import kotlin.system.exitProcess
 
-private fun File.isLanguageFolder(): Boolean {
-    if (!this.isDirectory) {
-        return false
-    }
-    try {
-        Language.valueOf(this.name.toUpperCase())
-    } catch (e: IllegalArgumentException) {
-        return false
-    }
-    return true
-}
-
-private fun getAnonymizerList(rootPath: String): List<Anonymizer> {
-    val root = File(rootPath)
-    val anonymizers = emptyList<Anonymizer>()
-    root.listFiles()?.filter { it.isLanguageFolder() }?.forEach { folder ->
-        val language = Language.valueOf(folder.name.toUpperCase())
-        println(language)
-//        val anonymizer = when(language) {
-//            Language.PYTHON -> TODO()
-//            Language.JAVA -> TODO()
-//        }
-    }
-    return anonymizers
-}
-
-class Runner: ApplicationStarter {
+class Runner : ApplicationStarter {
 
     private lateinit var inputDir: String
 
@@ -50,7 +23,8 @@ class Runner: ApplicationStarter {
 
     class AnonymizerRunnerArgs(parser: ArgParser) {
         val input by parser.storing(
-            "-i", "--path",
+            "-i",
+            "--path",
             help = "Input directory with data in language folders"
         )
     }
@@ -61,8 +35,13 @@ class Runner: ApplicationStarter {
                 inputDir = Paths.get(input).toString()
             }
             project = ProjectUtil.openOrImport(getTmpProjectDir(), null, true)
-            getAnonymizerList(inputDir)
-
+            project?.let { it ->
+                // TODO: add other languages
+                val anonymizers = listOf(PythonAnonymizer(it), JavaAnonymizer(it), KotlinAnonymizer(it))
+                anonymizers.forEach { anonymizer ->
+                    anonymizer.anonymizeLanguageFolder(inputDir)
+                }
+            }
         } catch (ex: SystemExitException) {
             logger.error(ex)
         } catch (ex: Exception) {

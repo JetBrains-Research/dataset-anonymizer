@@ -2,6 +2,7 @@ package org.jetbrains.research.ml.dataset.anonymizer
 
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.project.Project
+import com.intellij.openapi.util.io.FileUtil
 import com.intellij.openapi.vfs.LocalFileSystem
 import com.intellij.psi.PsiElement
 import com.jetbrains.extensions.python.toPsi
@@ -9,15 +10,16 @@ import krangl.DataFrame
 import krangl.map
 import krangl.readCSV
 import krangl.writeCSV
-import org.jetbrains.research.ml.dataset.anonymizer.util.Column
-import org.jetbrains.research.ml.dataset.anonymizer.util.Extension
-import org.jetbrains.research.ml.dataset.anonymizer.util.Language
-import org.jetbrains.research.ml.dataset.anonymizer.util.createFile
+import org.jetbrains.research.ml.dataset.anonymizer.util.*
 import java.io.File
 
-fun getTmpProjectDir(): String = "${System.getProperty("java.io.tmpdir")}/tmpProject"
+fun getTmpProjectDir(): String {
+    val path = "${System.getProperty("java.io.tmpdir")}/tmpProject"
+    createFolder(path)
+    return path
+}
 
-abstract class Anonymizer(private val tmpDataPath: String = getTmpProjectDir()) {
+abstract class Anonymizer(private val tmpDataPath: String) {
     protected abstract val language: Language
     protected abstract val transformations: List<(PsiElement, Boolean) -> Unit>
     protected abstract val project: Project
@@ -33,7 +35,7 @@ abstract class Anonymizer(private val tmpDataPath: String = getTmpProjectDir()) 
         ApplicationManager.getApplication().invokeAndWait {
             transformations.forEach { it(psi, false) }
             ApplicationManager.getApplication().runWriteAction {
-                com.intellij.openapi.util.io.FileUtil.delete(file)
+                FileUtil.delete(file)
             }
         }
         LocalFileSystem.getInstance().refreshAndFindFileByIoFile(file)
@@ -56,7 +58,9 @@ abstract class Anonymizer(private val tmpDataPath: String = getTmpProjectDir()) 
         val outputLanguageFolder = "${root.parent}/anonymizerResult/${language.value}"
         val languageFolder = File("$rootPath/${language.value}")
         languageFolder.listFiles()?.filter { it.isDirectory }?.forEach { taskFolder ->
+            println("Start handling task folder: $taskFolder")
             taskFolder.listFiles()?.filter { it.isFile && it.name.endsWith(Extension.CSV.value) }?.forEach {
+                println("Current file is ${it.path}")
                 val df = anonymizeCsvFile(it.path)
                 val outputPath = "$outputLanguageFolder/${taskFolder.name}/${it.name}"
                 val outputFile = createFile(outputPath)

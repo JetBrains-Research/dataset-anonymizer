@@ -1,12 +1,31 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
+group = "io.github.nbirillo.dataset.anonymizer"
+version = "1.0-SNAPSHOT"
+
 plugins {
-    id("org.jetbrains.intellij") version "0.4.22"
+    id("org.jetbrains.intellij") version "0.4.21"
     java
     kotlin("jvm") version "1.4.10"
     id("com.github.johnrengelman.shadow") version "5.1.0"
     id("org.jetbrains.dokka") version "0.10.1"
     id("org.jlleitschuh.gradle.ktlint") version "9.4.1"
+}
+
+repositories {
+    mavenCentral()
+    jcenter()
+    flatDir {
+        dirs("libs")
+    }
+}
+
+dependencies {
+    implementation(kotlin("stdlib-jdk8"))
+    // TODO: publish transformation plugin
+    implementation(fileTree("libs") { include("*.jar") })
+    implementation(group = "de.mpicbg.scicomp", name = "krangl", version = "0.9.1")
+    implementation(group = "com.xenomachina", name = "kotlin-argparser", version = "2.0.7")
 }
 
 intellij {
@@ -17,31 +36,6 @@ intellij {
 
 ktlint {
     enableExperimentalRules.set(true)
-}
-
-group = "io.github.nbirillo.dataset.anonymizer"
-version = "1.0-SNAPSHOT"
-
-apply {
-    plugin("kotlin")
-    plugin("java")
-    plugin("org.jetbrains.intellij")
-}
-
-dependencies {
-    implementation(kotlin("stdlib-jdk8"))
-    // TODO: publish transformation plugin
-    implementation(fileTree("libs") { include("*.jar") })
-    implementation("de.mpicbg.scicomp:krangl:0.9.1")
-    implementation("com.xenomachina:kotlin-argparser:2.0.7")
-}
-
-repositories {
-    mavenCentral()
-    jcenter()
-    flatDir {
-        dirs("libs")
-    }
 }
 
 tasks.withType<KotlinCompile> {
