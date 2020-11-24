@@ -8,7 +8,7 @@ An IntelliJ-based IDE plugin for code anonymization in datasets
 
 # Description
 
-The plugin deletes all comments in the code snapshots and anonymizes all variables, functions and so on names in the code.
+The plugin deletes all comments in the code snapshots and anonymizes all variables, functions and any other names in the code.
 
 The root folder with the data need to have the following structure:
 
@@ -43,5 +43,5 @@ The anonymization process description can be found here:
 
 Just clone the repo by `git clone https://github.com/nbirillo/dataset-anonymizer.git` and run `./gradlew :cli -Pinput=/path/to/folder/with/dataset`.
 
-To build a .zip distribution of the plugin to run `./gradlew build shadowJar`. The .zip is located in `build/distributions/dataset-anonymizer-1.0-SNAPSHOT.zip`.
+To build a .zip distribution of the plugin run `./gradlew build shadowJar`. The .zip is located in `build/distributions/dataset-anonymizer-1.0-SNAPSHOT.zip`.
 

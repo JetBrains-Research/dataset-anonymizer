@@ -41,8 +41,6 @@ class Runner : ApplicationStarter {
                     anonymizer.anonymizeLanguageFolder(inputDir)
                 }
             }
-        } catch (ex: SystemExitException) {
-            logger.error(ex)
         } catch (ex: Exception) {
             logger.error(ex)
         } finally {
