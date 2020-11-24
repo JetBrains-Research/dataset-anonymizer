@@ -4,7 +4,7 @@ import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.LocalFileSystem
 import com.intellij.psi.PsiElement
-import com.jetbrains.extensions.python.toPsi
+import com.intellij.psi.PsiManager
 import krangl.DataFrame
 import krangl.map
 import krangl.readCSV
@@ -28,7 +28,7 @@ abstract class Anonymizer(private val tmpDataPath: String = getTmpDir()) {
         val virtualFile = LocalFileSystem.getInstance().refreshAndFindFileByIoFile(file)
             ?: error("The virtual file ${file.path} was not created")
         val psi = ApplicationManager.getApplication().runReadAction<PsiElement> {
-            virtualFile.toPsi(project) as PsiElement
+            PsiManager.getInstance(project).findFile(virtualFile) as PsiElement
         }
         ApplicationManager.getApplication().invokeAndWait {
             transformations.forEach { it(psi, false) }
