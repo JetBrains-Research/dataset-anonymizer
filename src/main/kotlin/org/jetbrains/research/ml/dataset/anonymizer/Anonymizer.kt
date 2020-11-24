@@ -61,10 +61,13 @@ abstract class Anonymizer(private val tmpDataPath: String) {
             println("Start handling task folder: $taskFolder")
             taskFolder.listFiles()?.filter { it.isFile && it.name.endsWith(Extension.CSV.value) }?.forEach {
                 println("Current file is ${it.path}")
-                val df = anonymizeCsvFile(it.path)
                 val outputPath = "$outputLanguageFolder/${taskFolder.name}/${it.name}"
-                val outputFile = createFile(outputPath)
-                df.writeCSV(outputFile)
+                // don't handle files twice
+                if (!File(outputPath).exists()) {
+                    val outputFile = createFile(outputPath)
+                    val df = anonymizeCsvFile(it.path)
+                    df.writeCSV(outputFile)
+                }
             }
         }
     }
