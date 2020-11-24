@@ -12,6 +12,8 @@ import krangl.readCSV
 import krangl.writeCSV
 import org.jetbrains.research.ml.dataset.anonymizer.util.*
 import java.io.File
+import java.text.SimpleDateFormat
+import java.util.*
 
 fun getTmpProjectDir(): String {
     val path = "${System.getProperty("java.io.tmpdir")}/tmpProject"
@@ -60,7 +62,9 @@ abstract class Anonymizer(private val tmpDataPath: String) {
         languageFolder.listFiles()?.filter { it.isDirectory }?.forEach { taskFolder ->
             println("Start handling task folder: $taskFolder")
             taskFolder.listFiles()?.filter { it.isFile && it.name.endsWith(Extension.CSV.value) }?.forEach {
-                println("Current file is ${it.path}")
+                val sdf = SimpleDateFormat("dd/M/yyyy hh:mm:ss")
+                val currentDate = sdf.format(Date())
+                println("Current file is ${it.path}. Current date is: $currentDate")
                 val outputPath = "$outputLanguageFolder/${taskFolder.name}/${it.name}"
                 // don't handle files twice
                 if (!File(outputPath).exists()) {
