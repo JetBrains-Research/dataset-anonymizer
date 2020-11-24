@@ -5,7 +5,6 @@ import com.intellij.openapi.application.ApplicationStarter
 import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.project.Project
 import com.xenomachina.argparser.ArgParser
-import com.xenomachina.argparser.SystemExitException
 import org.jetbrains.research.ml.dataset.anonymizer.java.JavaAnonymizer
 import org.jetbrains.research.ml.dataset.anonymizer.python.PythonAnonymizer
 import java.nio.file.Paths
