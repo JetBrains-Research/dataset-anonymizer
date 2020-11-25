@@ -1,10 +1,10 @@
 public class c1 {
 
-    public c1_init1() {
+    public c1() {
 
     }
 
-    public c1_init2(int c1_init2_p1) {
+    public c1(int c1_p1) {
 
     }
 
