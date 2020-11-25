@@ -15,13 +15,14 @@ abstract class JvmTypes {
     abstract fun isLambda(element: PsiElement) : Boolean
     abstract fun isVariable(element: PsiElement) : Boolean
     abstract fun isInterface(element: PsiElement) : Boolean
-    abstract fun isBaseMethod(element: PsiElement) : Boolean
     abstract fun isConstructor(element: PsiElement) : Boolean
+    abstract fun isStatic(element: PsiMember): Boolean
     fun isFunction(element: PsiElement) : Boolean = isStaticFunction(element) || isNonStaticFunction(element)
-    fun isStaticField(element: PsiElement) : Boolean = element is PsiField && element.isStatic()
-    fun isNonStaticField(element: PsiElement) : Boolean = element is PsiField && !element.isStatic()
+    fun isStaticField(element: PsiElement) : Boolean = element is PsiField && isStatic(element)
 
-    protected fun PsiMember.isStatic(): Boolean {
+    fun isNonStaticField(element: PsiElement) : Boolean = element is PsiField && !isStatic(element)
+
+    protected fun PsiMember.hasModifier(modifier: String): Boolean {
         return this.modifierList != null && this.modifierList!!.hasModifierProperty("static")
     }
 

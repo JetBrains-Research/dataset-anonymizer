@@ -1,7 +1,7 @@
 public abstract class Test3_0 : Operationable {
 
     override fun equals(other: Any?): Boolean {
-        return super.equals(other);
+        return super.equals(other)
     }
 
     fun main() {

@@ -55,14 +55,14 @@ open class TransformationsTest(testDataRoot: String) : ParametrizedBaseTest(test
     ) {
         LOG.info("The current input file is: ${inFile.path}")
         LOG.info("The current output file is: ${outFile.path}")
-        val expectedSrc = getPsiFile(outFile).text
+        val expectedSrc = getPsiFile(outFile).text.dropLastWhile { it == '\n' }
         LOG.info("The expected code is:\n$expectedSrc")
         val psiInElement = getPsiFile(inFile)
         ApplicationManager.getApplication().invokeAndWait {
             transformation(psiInElement, true)
             PsiTestUtil.checkFileStructure(psiInElement)
         }
-        val actualSrc = psiInElement.text
+        val actualSrc = psiInElement.text.dropLastWhile { it == '\n' }
         LOG.info("The actual code is:\n$actualSrc")
         assertEquals(expectedSrc, actualSrc)
     }

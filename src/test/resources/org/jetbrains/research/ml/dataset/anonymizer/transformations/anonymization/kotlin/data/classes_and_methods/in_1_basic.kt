@@ -12,3 +12,4 @@ public class Test1_0 {
 interface SomeInterface {
     fun calculate(x: Int, y: Int): Int
 }
+

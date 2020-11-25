@@ -1,7 +1,7 @@
-public abstract class c1 : Operationable {
+public abstract class c1 : i1 {
 
-    override fun equals(c1_p1: Any?): Boolean {
-        return super.equals(c1_p1);
+    override fun equals(equals_p1: Any?): Boolean {
+        return super.equals(equals_p1)
     }
 
     fun main() {

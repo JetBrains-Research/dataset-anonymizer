@@ -4,7 +4,7 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiNamedElement
 import com.intellij.psi.util.PsiTreeUtil.findFirstParent
 
-open class JvmElementAnonymizer(private val types: JvmTypes)  {
+open class JvmElementAnonymizer(protected val types: JvmTypes)  {
     val allRenames: MutableList<Pair<PsiElement, String>> = mutableListOf()
     private val elementToNewName: MutableMap<PsiElement, String?> = mutableMapOf()
     private val parentToKindCounter: MutableMap<PsiElement?, NamedEntityKindCounter> = mutableMapOf()
@@ -23,7 +23,7 @@ open class JvmElementAnonymizer(private val types: JvmTypes)  {
     }
 
     private fun findAnonName(element: PsiElement): String? {
-        if (!element.toAnonymize()) return null
+        if (!toAnonymize(element)) return null
         val parent = getDefinitionParent(element)
 //      Take already registered name for constructors and overridden methods
         when {
@@ -46,8 +46,8 @@ open class JvmElementAnonymizer(private val types: JvmTypes)  {
     /**
      * We don't want to anonymize some names (for example, functions like 'equals' or 'main')
      */
-    private fun PsiElement.toAnonymize(): Boolean
-        = !(types.isFunction(this) && this is PsiNamedElement && this.name in notToAnonymize)
+    protected open fun toAnonymize(element: PsiElement): Boolean
+        = !(types.isFunction(element) && element is PsiNamedElement && element.name in notToAnonymize)
 
     /**
      * We want to store some anonymized names, but cannot rename elements (for example, lambda functions)

@@ -1,7 +1,7 @@
 public class Test2_0 : Operationable {
 
     override fun equals(other: Any?): Boolean {
-        return super.equals(other);
+        return super.equals(other)
     }
 
     fun main() {
@@ -10,7 +10,7 @@ public class Test2_0 : Operationable {
 
 
     override fun calculate(x: Int, y: Int): Int {
-        return 0;
+        return 0
     }
 }
 

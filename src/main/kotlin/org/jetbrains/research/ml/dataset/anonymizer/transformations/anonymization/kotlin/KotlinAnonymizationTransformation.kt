@@ -6,7 +6,13 @@ import org.jetbrains.research.ml.ast.transformations.Transformation
 import org.jetbrains.research.ml.dataset.anonymizer.transformations.anonymization.JvmAnonymizationVisitor
 import org.jetbrains.research.ml.dataset.anonymizer.transformations.anonymization.JvmElementAnonymizer
 
-class KotlinAnonymizationVisitor(file: PsiFile) : JvmAnonymizationVisitor(file, JvmElementAnonymizer(KotlinTypes))
+class KotlinAnonymizationVisitor(file: PsiFile) : JvmAnonymizationVisitor(file, object : JvmElementAnonymizer(KotlinTypes) {
+//  We don't need to anonymize constructors in kotlin
+    override fun toAnonymize(element: PsiElement): Boolean {
+        return !types.isConstructor(element) && super.toAnonymize(element)
+    }
+})
+
 
 object KotlinAnonymizationTransformation : Transformation {
     override val metadataKey: String
