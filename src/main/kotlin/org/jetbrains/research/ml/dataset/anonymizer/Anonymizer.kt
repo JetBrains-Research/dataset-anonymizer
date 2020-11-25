@@ -83,6 +83,7 @@ abstract class Anonymizer(private val tmpDataPath: String) {
         }
         return df.addColumn(Column.FRAGMENT.key) { filePath ->
             filePath[Column.FRAGMENT.key].map<String> {
+                println("Current code fragment is\n$it\n\n")
                 anonymize(it).text
             }
         }
