@@ -12,12 +12,9 @@ object JavaTypes : JvmTypes() {
     override fun isLambda(element: PsiElement): Boolean = element is PsiLambdaExpression
     override fun isVariable(element: PsiElement): Boolean = element is PsiLocalVariable && element.parent is PsiDeclarationStatement
     override fun isInterface(element: PsiElement): Boolean = element is PsiClass && element.isInterface
-    override fun getDefinitionParent(definition: PsiElement): PsiElement? {
-        if (isGlobal(definition)) return null
-        val parent = definition.parent
-        return (parent as? PsiDeclarationStatement)?.parent ?: parent
-    }
-
+    override fun isConstructor(element: PsiElement) : Boolean = element is PsiMethod && element.isConstructor
     override fun isBaseMethod(element: PsiElement): Boolean =
         element is PsiMethod && PsiSuperMethodImplUtil.findDeepestSuperMethod(element) == null
+    override fun getSuperMethod(element: PsiElement): PsiElement? =
+        PsiSuperMethodImplUtil.findDeepestSuperMethod(element as PsiMethod)
 }

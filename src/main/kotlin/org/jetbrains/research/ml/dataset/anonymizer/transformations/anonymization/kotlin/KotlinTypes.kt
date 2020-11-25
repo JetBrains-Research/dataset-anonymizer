@@ -6,6 +6,7 @@ import com.intellij.psi.impl.PsiSuperMethodImplUtil
 import com.intellij.psi.util.PsiTreeUtil
 import org.jetbrains.kotlin.psi.*
 import org.jetbrains.research.ml.dataset.anonymizer.transformations.anonymization.JvmTypes
+import org.jetbrains.research.ml.dataset.anonymizer.transformations.anonymization.java.JavaTypes
 
 object KotlinTypes : JvmTypes() {
     override fun isClass(element: PsiElement): Boolean = !isInterface(element) && element is KtClass
@@ -16,9 +17,11 @@ object KotlinTypes : JvmTypes() {
     override fun isLambda(element: PsiElement): Boolean = element is KtLambdaExpression
     override fun isVariable(element: PsiElement): Boolean = element is KtProperty
     override fun isInterface(element: PsiElement): Boolean = element is KtClass && element.isInterface()
-    override fun getDefinitionParent(definition: PsiElement): PsiElement? {
-        if (isGlobal(definition)) return null
-        return PsiTreeUtil.findFirstParent(definition) { p -> isDefinition(p) }
+    override fun isConstructor(element: PsiElement): Boolean {
+        return false
+    }
+    override fun getSuperMethod(element: PsiElement): PsiElement? {
+        return JavaTypes.getSuperMethod(element)
     }
     override fun isBaseMethod(element: PsiElement): Boolean =
         element is PsiMethod && PsiSuperMethodImplUtil.findDeepestSuperMethod(element) == null

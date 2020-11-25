@@ -16,9 +16,10 @@ abstract class JvmTypes {
     abstract fun isVariable(element: PsiElement) : Boolean
     abstract fun isInterface(element: PsiElement) : Boolean
     abstract fun isBaseMethod(element: PsiElement) : Boolean
+    abstract fun isConstructor(element: PsiElement) : Boolean
     fun isFunction(element: PsiElement) : Boolean = isStaticFunction(element) || isNonStaticFunction(element)
-    private fun isStaticField(element: PsiElement) : Boolean = element is PsiField && element.isStatic()
-    private fun isNonStaticField(element: PsiElement) : Boolean = element is PsiField && !element.isStatic()
+    fun isStaticField(element: PsiElement) : Boolean = element is PsiField && element.isStatic()
+    fun isNonStaticField(element: PsiElement) : Boolean = element is PsiField && !element.isStatic()
 
     protected fun PsiMember.isStatic(): Boolean {
         return this.modifierList != null && this.modifierList!!.hasModifierProperty("static")
@@ -35,15 +36,6 @@ abstract class JvmTypes {
             isNonStaticField(element)
     }
 
-    abstract fun getDefinitionParent(definition: PsiElement): PsiElement?
-
-    fun isGlobal(element: PsiElement): Boolean =
-        findFirstParent(element, true) { p -> isClass(p) } == null &&
-            !isParameter(element) &&
-            element.useScope !is LocalSearchScope &&
-            findFirstParent(element, true) { p -> isLambda(p) } == null
-
-
     fun getElementKind(element: PsiElement): NamedEntityKind? {
         return when {
             isClass(element) -> NamedEntityKind.Class
@@ -58,5 +50,7 @@ abstract class JvmTypes {
             else -> null
         }
     }
+
+    abstract fun getSuperMethod(element: PsiElement): PsiElement?
 }
 
