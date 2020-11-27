@@ -17,6 +17,16 @@ fun createFile(path: String, content: String = ""): File {
     return file
 }
 
+fun createFolder(path: String) {
+    val file = File(path)
+    if (file.exists() && file.isFile) {
+        file.delete()
+    }
+    if (!file.exists()) {
+        file.mkdirs()
+    }
+}
+
 enum class Extension(val value: String) {
     CSV(".csv"),
     PY(".py"),
