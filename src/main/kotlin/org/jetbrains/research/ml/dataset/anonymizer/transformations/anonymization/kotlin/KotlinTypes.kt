@@ -9,24 +9,25 @@ import org.jetbrains.research.ml.dataset.anonymizer.transformations.anonymizatio
 
 object KotlinTypes : JvmTypes() {
     override fun isClass(element: PsiElement?): Boolean =
-        !isInterface(element) && (element is KtClass || element.isObject())
+        (element is KtClass || element.isObject()) && !isInterface(element)
     override fun isFunction(element: PsiElement?): Boolean = element is KtFunction
-    override fun isStaticFunction(element: PsiElement?): Boolean = element is KtFunction && element.isStatic()
-    override fun isNonStaticFunction(element: PsiElement?): Boolean = element is KtFunction && !element.isStatic()
+    override fun isStaticFunction(element: PsiElement?): Boolean = isFunction(element) && element.isStatic()
+    override fun isNonStaticFunction(element: PsiElement?): Boolean = isFunction(element) && !element.isStatic()
     override fun isParameter(element: PsiElement?): Boolean = element is KtParameter
     override fun isLambda(element: PsiElement?): Boolean = element is KtLambdaExpression
-    override fun isVariable(element: PsiElement?): Boolean = element is KtProperty && !element.isField()
+    override fun isVariable(element: PsiElement?): Boolean = element is KtProperty && !isField(element)
     override fun isInterface(element: PsiElement?): Boolean = element is KtClass && element.isInterface()
     override fun isConstructor(element: PsiElement?): Boolean = element is KtSecondaryConstructor
-    override fun isStaticField(element: PsiElement?): Boolean = element.isField() && element.isStatic()
-    override fun isNonStaticField(element: PsiElement?): Boolean = element.isField() && !element.isStatic()
+    override fun isStaticField(element: PsiElement?): Boolean = isField(element) && element.isStatic()
+    override fun isNonStaticField(element: PsiElement?): Boolean = isField(element) && !element.isStatic()
 
     /**
-     * In kotlin fields are also KtProperty, so we need to check the parent of it
-     * Todo: do we need to distinguish them?
+     * In kotlin fields are also KtProperty (as variables), so we need to check the parent of it to be sure.
+     * However, we still want to distinguish fields and variables to be more accurate in comparing anonymized
+     * pieces of code.
      */
-    private fun PsiElement?.isField(): Boolean =
-        this is KtProperty && isClass(findFirstParent(this) { isFunction(it) || isClass(it) })
+    override fun isField(element: PsiElement?): Boolean =
+        element is KtProperty && isClass(findFirstParent(element) { isFunction(it) || isClass(it) })
 
     override fun getSuperMethod(element: PsiElement): PsiElement? {
         return if (element is KtFunction && element.hasModifier(KtTokens.OVERRIDE_KEYWORD)) {

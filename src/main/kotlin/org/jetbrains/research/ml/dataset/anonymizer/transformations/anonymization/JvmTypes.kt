@@ -7,6 +7,7 @@ import com.intellij.psi.impl.PsiSuperMethodImplUtil
 
 abstract class JvmTypes {
     abstract fun isClass(element: PsiElement?): Boolean
+    abstract fun isFunction(element: PsiElement?): Boolean
     abstract fun isStaticFunction(element: PsiElement?): Boolean
     abstract fun isNonStaticFunction(element: PsiElement?): Boolean
     abstract fun isParameter(element: PsiElement?): Boolean
@@ -14,20 +15,18 @@ abstract class JvmTypes {
     abstract fun isVariable(element: PsiElement?): Boolean
     abstract fun isInterface(element: PsiElement?): Boolean
     abstract fun isConstructor(element: PsiElement?): Boolean
+    abstract fun isField(element: PsiElement?): Boolean
     abstract fun isStaticField(element: PsiElement?): Boolean
     abstract fun isNonStaticField(element: PsiElement?): Boolean
-    abstract fun isFunction(element: PsiElement?): Boolean
 
     open fun isDefinition(element: PsiElement): Boolean {
         return isClass(element) ||
-            isStaticFunction(element) ||
-            isNonStaticFunction(element) ||
+            isFunction(element) ||
             isParameter(element) ||
             isLambda(element) ||
             isVariable(element) ||
             isInterface(element) ||
-            isStaticField(element) ||
-            isNonStaticField(element)
+            isField(element)
     }
 
     open fun getElementKind(element: PsiElement): NamedEntityKind? {
