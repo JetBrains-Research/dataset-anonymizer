@@ -1,0 +1,8 @@
+date,timestamp,fileName,fileHashCode,documentHashCode,fragment,chosenTask,writtenTask,age,programExperience,taskStatus,activePane,testsResults,language,timestampAti,eventType,eventData
+2019-12-09T20:13:50.646+03:00,1946,max_3.py,4709,21700686,"@
+v1 = int(input())
+v2 = int(input())
+v3 = int(input())
+print(v1*v3)
+print(v2*v3)
+",max_3,,14.0,LESS_THAN_HALF_YEAR,,taskStatusPane,"[-1, -1, -1, -1, -1, -1]",python,,,
