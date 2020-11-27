@@ -10,11 +10,12 @@ object JavaTypes : JvmTypes() {
     override fun isNonStaticFunction(element: PsiElement?): Boolean = element is PsiMethod && !element.isStatic()
     override fun isParameter(element: PsiElement?): Boolean = element is PsiParameter
     override fun isLambda(element: PsiElement?): Boolean = element is PsiLambdaExpression
-    override fun isVariable(element: PsiElement?): Boolean = element is PsiLocalVariable && element.parent is PsiDeclarationStatement
+    override fun isVariable(element: PsiElement?): Boolean =
+        element is PsiLocalVariable && element.parent is PsiDeclarationStatement
     override fun isInterface(element: PsiElement?): Boolean = element is PsiClass && element.isInterface
-    override fun isConstructor(element: PsiElement?) : Boolean = element is PsiMethod && element.isConstructor
-    override fun isStaticField(element: PsiElement?) : Boolean = element is PsiField && element.isStatic()
-    override fun isNonStaticField(element: PsiElement?) : Boolean = element is PsiField && !element.isStatic()
+    override fun isConstructor(element: PsiElement?): Boolean = element is PsiMethod && element.isConstructor
+    override fun isStaticField(element: PsiElement?): Boolean = element is PsiField && element.isStatic()
+    override fun isNonStaticField(element: PsiElement?): Boolean = element is PsiField && !element.isStatic()
     override fun getSuperMethod(element: PsiElement): PsiElement? = getSuperMethod(element as PsiMethod)
 
     private fun PsiMember.isStatic(): Boolean = hasModifier("static")

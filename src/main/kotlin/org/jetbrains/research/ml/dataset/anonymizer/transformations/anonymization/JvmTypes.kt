@@ -6,16 +6,16 @@ import com.intellij.psi.PsiNamedElement
 import com.intellij.psi.impl.PsiSuperMethodImplUtil
 
 abstract class JvmTypes {
-    abstract fun isClass(element: PsiElement?) : Boolean
-    abstract fun isStaticFunction(element: PsiElement?) : Boolean
-    abstract fun isNonStaticFunction(element: PsiElement?) : Boolean
-    abstract fun isParameter(element: PsiElement?) : Boolean
-    abstract fun isLambda(element: PsiElement?) : Boolean
-    abstract fun isVariable(element: PsiElement?) : Boolean
-    abstract fun isInterface(element: PsiElement?) : Boolean
-    abstract fun isConstructor(element: PsiElement?) : Boolean
-    abstract fun isStaticField(element: PsiElement?) : Boolean
-    abstract fun isNonStaticField(element: PsiElement?) : Boolean
+    abstract fun isClass(element: PsiElement?): Boolean
+    abstract fun isStaticFunction(element: PsiElement?): Boolean
+    abstract fun isNonStaticFunction(element: PsiElement?): Boolean
+    abstract fun isParameter(element: PsiElement?): Boolean
+    abstract fun isLambda(element: PsiElement?): Boolean
+    abstract fun isVariable(element: PsiElement?): Boolean
+    abstract fun isInterface(element: PsiElement?): Boolean
+    abstract fun isConstructor(element: PsiElement?): Boolean
+    abstract fun isStaticField(element: PsiElement?): Boolean
+    abstract fun isNonStaticField(element: PsiElement?): Boolean
     abstract fun isFunction(element: PsiElement?): Boolean
 
     open fun isDefinition(element: PsiElement): Boolean {
@@ -56,4 +56,3 @@ abstract class JvmTypes {
      */
     open fun toRename(element: PsiElement): Boolean = element is PsiNamedElement
 }
-

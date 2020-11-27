@@ -8,7 +8,8 @@ import org.jetbrains.kotlin.psi.*
 import org.jetbrains.research.ml.dataset.anonymizer.transformations.anonymization.JvmTypes
 
 object KotlinTypes : JvmTypes() {
-    override fun isClass(element: PsiElement?): Boolean = !isInterface(element) && (element is KtClass || element.isObject())
+    override fun isClass(element: PsiElement?): Boolean =
+        !isInterface(element) && (element is KtClass || element.isObject())
     override fun isFunction(element: PsiElement?): Boolean = element is KtFunction
     override fun isStaticFunction(element: PsiElement?): Boolean = element is KtFunction && element.isStatic()
     override fun isNonStaticFunction(element: PsiElement?): Boolean = element is KtFunction && !element.isStatic()
@@ -41,5 +42,3 @@ object KotlinTypes : JvmTypes() {
     private fun PsiElement?.isStatic(): Boolean =
         this?.parent is KtClassBody && this.parent?.parent is KtObjectDeclaration
 }
-
-
