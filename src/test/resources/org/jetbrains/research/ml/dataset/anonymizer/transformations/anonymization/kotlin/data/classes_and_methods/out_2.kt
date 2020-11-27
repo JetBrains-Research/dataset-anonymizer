@@ -8,7 +8,8 @@ public class c1 : i1 {
 
     }
 
-    override fun i1_f1(i1_f1_p1: Int, i1_fi_p2: Int): Int {
+
+    override fun i1_f1(i1_f1_p1: Int, i1_f1_p2: Int): Int {
         return 0
     }
 }

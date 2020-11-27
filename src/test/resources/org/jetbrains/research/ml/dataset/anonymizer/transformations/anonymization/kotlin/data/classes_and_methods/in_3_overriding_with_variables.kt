@@ -10,7 +10,7 @@ public abstract class Test3_0 : Operationable {
 
 
     override fun calculate(x: Int, y: Int): Int {
-        return 0;
+        return 0
     }
 
     abstract fun test(x: Int, y: Int)

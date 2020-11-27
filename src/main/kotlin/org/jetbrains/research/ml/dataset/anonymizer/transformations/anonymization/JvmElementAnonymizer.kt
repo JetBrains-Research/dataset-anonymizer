@@ -8,13 +8,16 @@ open class JvmElementAnonymizer(protected val types: JvmTypes)  {
     val allRenames: MutableList<Pair<PsiElement, String>> = mutableListOf()
     private val elementToNewName: MutableMap<PsiElement, String?> = mutableMapOf()
     private val parentToKindCounter: MutableMap<PsiElement?, NamedEntityKindCounter> = mutableMapOf()
+//  Todo: Maybe we need a more accurate way to check for 'main'?
+//      val mainFunctionDetector = MainFunctionDetector(trace.bindingContext, languageVersionSettings)
+//      val isMain = owner is KtNamedFunction && mainFunctionDetector.isMain(owner)
     protected val notToAnonymize = listOf("equals", "main", "hashCode", "toString")
 
     fun registerElement(element: PsiElement) {
         if (types.isDefinition(element)) {
             elementToNewName.getOrPut(element) {
                 findAnonName(element)?.also { newName ->
-                    if (element.toRename()) {
+                    if (types.toRename(element)) {
                         allRenames.add(element to newName)
                     }
                 }
@@ -37,10 +40,7 @@ open class JvmElementAnonymizer(protected val types: JvmTypes)  {
     }
 
     private fun getDefinitionParent(definition: PsiElement): PsiElement? {
-        return findFirstParent(definition, true) { p -> types.isDefinition(p) }?.also {
-//          Insure the parent is registered already to take its name as a prefix
-            registerElement(it)
-        }
+        return findFirstParent(definition, true) { p -> types.isDefinition(p) }
     }
 
     /**
@@ -48,12 +48,6 @@ open class JvmElementAnonymizer(protected val types: JvmTypes)  {
      */
     protected open fun toAnonymize(element: PsiElement): Boolean
         = !(types.isFunction(element) && element is PsiNamedElement && element.name in notToAnonymize)
-
-    /**
-     * We want to store some anonymized names, but cannot rename elements (for example, lambda functions)
-     */
-    private fun PsiElement.toRename(): Boolean
-        = !types.isLambda(this)
 
     private fun assembleAnonName(parent: PsiElement?, kind: NamedEntityKind): String {
         val prefix = getPrefix(parent)
@@ -70,7 +64,8 @@ open class JvmElementAnonymizer(protected val types: JvmTypes)  {
     private val PsiElement.scopeName: String
         get() = elementToNewName[this] ?: (this as? PsiNamedElement)?.name ?: ""
 
-    private fun getPrefix(parent: PsiElement?, toAddSeparator: Boolean = true): String {
-        return parent?.scopeName?.let { if (toAddSeparator) "${it}_" else it } ?: ""
+    private fun getPrefix(parent: PsiElement?): String {
+//      Insure the parent is registered already to take its name as a prefix
+        return parent?.registeredScopeName?.let { "${it}_" } ?: ""
     }
 }

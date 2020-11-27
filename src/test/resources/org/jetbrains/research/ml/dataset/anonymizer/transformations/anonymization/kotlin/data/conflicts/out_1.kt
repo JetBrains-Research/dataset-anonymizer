@@ -4,5 +4,4 @@ object c1 {
         main_v1 = 5
         val main_v2 = 1
     }
-
 }
