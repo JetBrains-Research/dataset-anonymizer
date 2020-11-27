@@ -1,4 +1,4 @@
-# Java Anonymization Transformation
+# Kotlin Anonymization Transformation
 
 ## Overview
 
