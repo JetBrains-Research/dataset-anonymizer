@@ -6,6 +6,7 @@ import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.project.Project
 import com.xenomachina.argparser.ArgParser
 import org.jetbrains.research.ml.dataset.anonymizer.java.JavaAnonymizer
+import org.jetbrains.research.ml.dataset.anonymizer.kotlin.KotlinAnonymizer
 import org.jetbrains.research.ml.dataset.anonymizer.python.PythonAnonymizer
 import java.nio.file.Paths
 import kotlin.system.exitProcess
@@ -34,8 +35,7 @@ class Runner : ApplicationStarter {
             }
             project = ProjectUtil.openOrImport(getTmpProjectDir(), null, true)
             project?.let { it ->
-                // TODO: add other languages
-                val anonymizers = listOf(PythonAnonymizer(it), JavaAnonymizer(it))
+                val anonymizers = listOf(PythonAnonymizer(it), JavaAnonymizer(it), KotlinAnonymizer(it))
                 anonymizers.forEach { anonymizer ->
                     anonymizer.anonymizeLanguageFolder(inputDir)
                 }

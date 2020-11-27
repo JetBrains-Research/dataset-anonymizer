@@ -1,0 +1,21 @@
+date,timestamp,fileName,fileHashCode,documentHashCode,fragment,chosenTask,writtenTask,age,programExperience,taskStatus,activePane,testsResults,language,timestampAti,eventType,eventData
+2019-12-14T11:28:24.787+05:00,13990,max_3.py,50591,763982381,"fun main(args: Array<String>) {
+    val data = (1..3).map {readLine()}
+    val a = data.first()?.toInt()
+    val b = data.elementAt(1)?.toInt()
+    val n = data.last()?.toInt()
+    val m = if(b != null && n != null) b*n else 0
+    val ansR = if(a != null && n != null) a*n + m/100 else 0
+    val ansK = m.rem(100)
+    print(""$ansR $ansK"")
+}",max_3,,39.0,MORE_THAN_SIX,,taskChooserPane,"[1.0, 0.0, 0.0, 0.0, 0.0, 0.0]",kotlin,,,
+2019-12-14T11:28:24.792+05:00,14013,max_3.py,50591,763982381,"fun main(args: Array<String>) {
+(    val data = (1..3).map {readLine()}
+    val a = data.first()?.toInt()
+    val b = data.elementAt(1)?.toInt()
+    val n = data.last()?.toInt()
+    val m = if(b != null && n != null) b*n else 0
+    val ansR = if(a != null && n != null) a*n + m/100 else 0
+    val ansK = m.rem(100)
+    print(""$ansR $ansK"")
+}",max_3,,39.0,MORE_THAN_SIX,,taskChooserPane,"[-1, -1, -1, -1, -1, -1]",kotlin,,,
