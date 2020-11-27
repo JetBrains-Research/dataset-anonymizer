@@ -1,6 +1,5 @@
-package org.jetbrains.research.ml.dataset.anonymizer.transformation.kotlin.comentsRemoval
+package org.jetbrains.research.ml.dataset.anonymizer.transformations.commentsRemoval.kotlin
 
-import org.jetbrains.research.ml.dataset.anonymizer.transformations.commentsRemoval.kotlin.KotlinCommentsRemovalTransformation
 import org.jetbrains.research.ml.dataset.anonymizer.transformations.util.TransformationsTest
 import org.jetbrains.research.ml.dataset.anonymizer.util.Extension
 import org.jetbrains.research.ml.dataset.anonymizer.util.TestFileFormat
