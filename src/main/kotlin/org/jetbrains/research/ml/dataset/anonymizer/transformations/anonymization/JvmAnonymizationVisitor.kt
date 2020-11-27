@@ -6,6 +6,7 @@ import com.intellij.psi.PsiFile
 import com.intellij.psi.PsiRecursiveElementVisitor
 import com.intellij.refactoring.rename.RenamePsiElementProcessor.forElement
 import com.intellij.util.IncorrectOperationException
+import org.jetbrains.kotlin.resolve.lazy.NoDescriptorForDeclarationException
 import java.util.logging.Logger
 
 open class JvmAnonymizationVisitor(file: PsiFile, val anonymizer: JvmElementAnonymizer) :
@@ -33,7 +34,12 @@ open class JvmAnonymizationVisitor(file: PsiFile, val anonymizer: JvmElementAnon
 
     private fun renameElementDelayed(definition: PsiElement, newName: String): () -> Unit {
         val processor = forElement(definition)
-        processor.prepareRenaming(definition, newName, mutableMapOf(definition to newName))
+        try {
+            processor.prepareRenaming(definition, newName, mutableMapOf(definition to newName))
+        } catch (e: NoDescriptorForDeclarationException) {
+            log.info("${e.message} for element $definition with new name $newName (maybe the code is incorrect)")
+            return { }
+        }
         val references = processor.findReferences(definition, definition.useScope, false)
         val usages = references.map { processor.createUsageInfo(definition, it, it.element) }.toTypedArray()
         return {
