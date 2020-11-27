@@ -9,4 +9,9 @@
     <description><![CDATA[
     An IntelliJ-based IDE plugin for code anonymization in datasets.
     ]]></description>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <!-- Add your extensions here -->
+        <appStarter implementation="org.jetbrains.research.ml.dataset.anonymizer.Runner"/>
+    </extensions>
 </idea-plugin>
