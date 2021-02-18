@@ -46,7 +46,15 @@ open class JvmAnonymizationVisitor(file: PsiFile, val anonymizer: JvmElementAnon
             try {
                 processor.renameElement(definition, newName, usages, null)
             } catch (e: IncorrectOperationException) {
-                log.info("Cannot perform the renaming for element $definition with new name $newName")
+                log.info(
+                    "IncorrectOperationException: Cannot perform the renaming for " +
+                        "element $definition with new name $newName"
+                )
+            } catch (e: NullPointerException) {
+                log.info(
+                    "NullPointerException: Cannot perform the renaming " +
+                        "for element $definition with new name $newName"
+                )
             }
         }
     }

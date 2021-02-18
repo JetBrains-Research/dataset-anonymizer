@@ -31,7 +31,7 @@ dependencies {
 intellij {
     version = "2020.2.3"
     downloadSources = false
-    setPlugins("com.intellij.java", "PythonCore:202.7660.27", "org.jetbrains.kotlin:1.3.72-release-IJ2020.1-1")
+    setPlugins("com.intellij.java", "PythonCore:202.7660.27", "org.jetbrains.kotlin")
 }
 
 ktlint {
@@ -49,7 +49,7 @@ tasks {
             "anonymizer",
             input?.let { "--path=$it" }
         )
-        jvmArgs = listOf("-Djava.awt.headless=true")
+        jvmArgs = listOf("-Djava.awt.headless=true", "--add-exports", "java.base/jdk.internal.vm=ALL-UNNAMED")
         standardInput = System.`in`
         standardOutput = System.`out`
     }

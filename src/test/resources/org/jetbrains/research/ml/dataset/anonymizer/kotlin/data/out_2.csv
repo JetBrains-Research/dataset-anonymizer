@@ -1,0 +1,21 @@
+date,timestamp,fileName,fileHashCode,documentHashCode,fragment,chosenTask,writtenTask,age,programExperience,taskStatus,activePane,testsResults,language,timestampAti,eventType,eventData
+2019-12-14T11:28:24.787+05:00,13990,max_3.py,50591,763982381,"fun main(main_p1: Array<String>) {
+    val main_v1 = (1..3).map {readLine()}
+    val main_v2 = main_v1.first()?.toInt()
+    val main_v3 = main_v1.elementAt(1)?.toInt()
+    val main_v4 = main_v1.last()?.toInt()
+    val main_v5 = if(main_v3 != null && main_v4 != null) main_v3*main_v4 else 0
+    val main_v6 = if(main_v2 != null && main_v4 != null) main_v2*main_v4 + main_v5/100 else 0
+    val main_v7 = main_v5.rem(100)
+    print(""$main_v6 $main_v7"")
+}",max_3,,39.0,MORE_THAN_SIX,,taskChooserPane,"[1.0, 0.0, 0.0, 0.0, 0.0, 0.0]",kotlin,,,
+2019-12-14T11:28:24.792+05:00,14013,max_3.py,50591,763982381,"fun main(main_p1: Array<String>) {
+(    val main_v1 = (1..3).map {readLine()}
+    val main_v2 = main_v1.first()?.toInt()
+    val main_v3 = main_v1.elementAt(1)?.toInt()
+    val main_v4 = main_v1.last()?.toInt()
+    val main_v5 = if(main_v3 != null && main_v4 != null) main_v3*main_v4 else 0
+    val main_v6 = if(main_v2 != null && main_v4 != null) main_v2*main_v4 + main_v5/100 else 0
+    val main_v7 = main_v5.rem(100)
+    print(""$main_v6 $main_v7"")
+}",max_3,,39.0,MORE_THAN_SIX,,taskChooserPane,"[-1, -1, -1, -1, -1, -1]",kotlin,,,
