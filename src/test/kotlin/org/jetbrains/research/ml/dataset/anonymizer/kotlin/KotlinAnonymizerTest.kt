@@ -17,6 +17,6 @@ class KotlinAnonymizerTest : AnonymizerTest(getResourcesRootPath(::KotlinAnonymi
     @Test
     fun kotlinAnonymizerTest() {
         val anonymizer = KotlinAnonymizer(myFixture.project, testDataPath)
-        assertCodeAnonymization(inFile!!, outFile!!, anonymizer)
+        assertCodeAnonymization(inFile!!, outFile!!, anonymizer, toCreateTmpFiles = true)
     }
 }

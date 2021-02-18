@@ -38,12 +38,24 @@ open class AnonymizerTest(testDataRoot: String) : ParametrizedBaseTest(testDataR
         return (df[Column.FRAGMENT.key] as StringCol).values.mapNotNull { it }
     }
 
-    protected fun assertCodeAnonymization(inFile: File, outFile: File, anonymizer: Anonymizer) {
+    // Usually we have to create psi file from fixture to correct find all references.
+    // But for Kotlin we have to create temporary files instead it
+    protected fun assertCodeAnonymization(
+        inFile: File,
+        outFile: File,
+        anonymizer: Anonymizer,
+        toCreateTmpFiles: Boolean = false
+    ) {
         LOG.info("The current input file is: ${inFile.path}")
         LOG.info("The current output file is: ${outFile.path}")
         val expectedDf = DataFrame.readCSV(outFile.path)
         LOG.info("The expected df is:\n$expectedDf")
-        val actualDf = anonymizer.anonymizeCsvFile(inFile.path, myFixture)
+        val fixture = if (toCreateTmpFiles) {
+            null
+        } else {
+            myFixture
+        }
+        val actualDf = anonymizer.anonymizeCsvFile(inFile.path, fixture)
         // We can compare only <fragment> column from df
         TestCase.assertEquals(getFragments(expectedDf), getFragments(actualDf))
     }
