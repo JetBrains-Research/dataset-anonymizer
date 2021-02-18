@@ -3,6 +3,6 @@ date,timestamp,fileName,fileHashCode,documentHashCode,fragment,chosenTask,writte
 v1 = int(input())
 v2 = int(input())
 v3 = int(input())
-print(v1*v3)
-print(v2*v3)
+print(v1 * v3)
+print(v2 * v3)
 ",max_3,,14.0,LESS_THAN_HALF_YEAR,,taskStatusPane,"[-1, -1, -1, -1, -1, -1]",python,,,

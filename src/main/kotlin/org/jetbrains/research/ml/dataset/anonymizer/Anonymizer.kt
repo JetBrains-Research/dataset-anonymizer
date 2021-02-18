@@ -6,6 +6,8 @@ import com.intellij.openapi.util.io.FileUtil
 import com.intellij.openapi.vfs.LocalFileSystem
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiManager
+import com.intellij.testFramework.fixtures.CodeInsightTestFixture
+import com.jetbrains.python.PythonFileType
 import krangl.DataFrame
 import krangl.map
 import krangl.readCSV
@@ -27,20 +29,47 @@ abstract class Anonymizer(private val tmpDataPath: String) {
     protected abstract val project: Project
     private var counter: Int = 0
 
-    protected fun anonymize(code: String): PsiElement {
-        val file = createFile("$tmpDataPath/tmp_${counter}${language.extension.value}", code)
-        val virtualFile = LocalFileSystem.getInstance().refreshAndFindFileByIoFile(file)
-            ?: error("The virtual file ${file.path} was not created")
-        val psi = ApplicationManager.getApplication().runReadAction<PsiElement> {
-            PsiManager.getInstance(project).findFile(virtualFile) as PsiElement
-        }
-        ApplicationManager.getApplication().invokeAndWait {
-            transformations.forEach { it(psi, false) }
-            ApplicationManager.getApplication().runWriteAction {
-                FileUtil.delete(file)
+    inner class PsiCreator(code: String) {
+        private val file = createFile("$tmpDataPath/tmp_${counter}${language.extension.value}", code)
+        val psi = createPsi()
+
+        private fun createPsi(): PsiElement {
+            val virtualFile = LocalFileSystem.getInstance().refreshAndFindFileByIoFile(file)
+                ?: error("The virtual file ${file.path} was not created")
+            return ApplicationManager.getApplication().runReadAction<PsiElement> {
+                PsiManager.getInstance(project).findFile(virtualFile) as PsiElement
             }
         }
-        LocalFileSystem.getInstance().refreshAndFindFileByIoFile(file)
+
+        fun deleteFile() {
+            ApplicationManager.getApplication().invokeAndWait {
+                ApplicationManager.getApplication().runWriteAction {
+                    FileUtil.delete(file)
+                }
+            }
+            LocalFileSystem.getInstance().refreshAndFindFileByIoFile(file)
+        }
+    }
+
+    private fun anonymize(code: String): PsiElement {
+        val psiCreator = PsiCreator(code)
+        anonymize(psiCreator.psi)
+        psiCreator.deleteFile()
+        return psiCreator.psi
+    }
+
+    // Only for tests
+    private fun anonymize(code: String, fixture: CodeInsightTestFixture): PsiElement {
+        val fileName = "dummy." + PythonFileType.INSTANCE.defaultExtension
+        val psiFile = fixture.configureByText(fileName, code)
+        anonymize(psiFile)
+        return psiFile
+    }
+
+    private fun anonymize(psi: PsiElement): PsiElement {
+        ApplicationManager.getApplication().invokeAndWait {
+            transformations.forEach { it(psi, false) }
+        }
         counter++
         return psi
     }
@@ -76,15 +105,16 @@ abstract class Anonymizer(private val tmpDataPath: String) {
         }
     }
 
-    fun anonymizeCsvFile(csvFilePath: String): DataFrame {
+    // TODO: I am not sure that we should use fixture here
+    fun anonymizeCsvFile(csvFilePath: String, fixture: CodeInsightTestFixture? = null): DataFrame {
         val df = DataFrame.readCSV(csvFilePath)
         if (Column.FRAGMENT.key !in df.cols.map { it.name }) {
             return df
         }
         return df.addColumn(Column.FRAGMENT.key) { filePath ->
-            filePath[Column.FRAGMENT.key].map<String> {
-                println("Current code fragment is\n$it\n\n")
-                anonymize(it).text
+            filePath[Column.FRAGMENT.key].map<String> { code ->
+                println("Current code fragment is\n$code\n\n")
+                fixture?.let { anonymize(code, fixture).text } ?: anonymize(code).text
             }
         }
     }
