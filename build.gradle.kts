@@ -57,4 +57,7 @@ tasks {
     register("cli") {
         dependsOn("runIde")
     }
+
+    withType<org.jetbrains.intellij.tasks.BuildSearchableOptionsTask>()
+        .forEach { it.enabled = false }
 }
