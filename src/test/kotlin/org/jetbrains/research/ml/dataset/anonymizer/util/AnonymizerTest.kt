@@ -2,6 +2,7 @@ package org.jetbrains.research.ml.dataset.anonymizer.util
 
 import junit.framework.TestCase
 import krangl.DataFrame
+import krangl.StringCol
 import krangl.readCSV
 import org.jetbrains.research.ml.dataset.anonymizer.Anonymizer
 import org.junit.Ignore
@@ -30,18 +31,32 @@ open class AnonymizerTest(testDataRoot: String) : ParametrizedBaseTest(testDataR
     @Parameterized.Parameter(1)
     var outFile: File? = null
 
-    protected fun assertCodeAnonymization(inFile: File, outFile: File, anonymizer: Anonymizer) {
+    private fun getFragments(df: DataFrame): List<String> {
+        if (Column.FRAGMENT.key !in df.cols.map { it.name }) {
+            return emptyList()
+        }
+        return (df[Column.FRAGMENT.key] as StringCol).values.mapNotNull { it }
+    }
+
+    // Usually we have to create psi file from fixture to correct find all references.
+    // But for Kotlin we have to create temporary files instead of it
+    protected fun assertCodeAnonymization(
+        inFile: File,
+        outFile: File,
+        anonymizer: Anonymizer,
+        toCreateTmpFiles: Boolean = false
+    ) {
         LOG.info("The current input file is: ${inFile.path}")
         LOG.info("The current output file is: ${outFile.path}")
         val expectedDf = DataFrame.readCSV(outFile.path)
         LOG.info("The expected df is:\n$expectedDf")
-        val actualDf = anonymizer.anonymizeCsvFile(inFile.path)
-        val expectedDfFragments = expectedDf.rows.map {
-            it[Column.FRAGMENT.key]
+        val fixture = if (toCreateTmpFiles) {
+            null
+        } else {
+            myFixture
         }
-        val actualDfFragments = actualDf.rows.map {
-            it[Column.FRAGMENT.key]
-        }
-        TestCase.assertEquals(expectedDfFragments, actualDfFragments)
+        val actualDf = anonymizer.anonymizeCsvFile(inFile.path, fixture)
+        // We can compare only <fragment> column from df
+        TestCase.assertEquals(getFragments(expectedDf), getFragments(actualDf))
     }
 }
