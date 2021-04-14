@@ -5,7 +5,6 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import com.intellij.psi.PsiRecursiveElementVisitor
 import com.intellij.refactoring.rename.RenamePsiElementProcessor.forElement
-import com.intellij.util.IncorrectOperationException
 import org.jetbrains.kotlin.resolve.lazy.NoDescriptorForDeclarationException
 import java.util.logging.Logger
 
@@ -45,8 +44,11 @@ open class JvmAnonymizationVisitor(file: PsiFile, val anonymizer: JvmElementAnon
         return {
             try {
                 processor.renameElement(definition, newName, usages, null)
-            } catch (e: IncorrectOperationException) {
-                log.info("Cannot perform the renaming for element $definition with new name $newName")
+            } catch (e: Exception) {
+                log.info(
+                    "IncorrectOperationException: Cannot perform the renaming for " +
+                        "element $definition with new name $newName"
+                )
             }
         }
     }
