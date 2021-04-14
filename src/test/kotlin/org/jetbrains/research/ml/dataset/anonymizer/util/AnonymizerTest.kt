@@ -39,7 +39,7 @@ open class AnonymizerTest(testDataRoot: String) : ParametrizedBaseTest(testDataR
     }
 
     // Usually we have to create psi file from fixture to correct find all references.
-    // But for Kotlin we have to create temporary files instead it
+    // But for Kotlin we have to create temporary files instead of it
     protected fun assertCodeAnonymization(
         inFile: File,
         outFile: File,
